@@ -20,3 +20,12 @@
 ## 7.2.3 해결책: 불변적 자료구조를 사용하라
 * Java 의 ImmutableList 클래스
 * 코틀린은 기본이 불변
+
+```
+fun main() {
+    val list = listOf(1, 2, 3)
+//    list.add(4)   // 컴파일 에러 발생
+    val mutableList = list.toMutableList()
+    mutableList.add(4)
+}
+```
