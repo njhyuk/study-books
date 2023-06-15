@@ -33,6 +33,20 @@
 	* 빌더에 의해 작성된 불변적 읽기 전용 클래스
 		* 예제 7.5 - 읽을수 만 있는 TextOption 클래스
 
+```
+fun main() {
+    printMessageWithPrefix(
+	prefix = "Warn",
+	message = "Hello"
+    )
+}
+}
+
+fun printMessageWithPrefix(message: String, prefix: String = "Info"): Unit {
+    println("[$prefix] $message")
+}
+```
+
 ### 쓰기 시 복사 패턴
 * 예제 7.6 : withFont 함수
 	* 객체의 기존 fountSize 값과 파라미터로 받은 newFont 로 객체 new
