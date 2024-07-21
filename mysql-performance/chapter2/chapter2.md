@@ -286,5 +286,50 @@ a 열에 where 절을 추가하면?
 
 ### 테이블 조인
 
+* MySQL은 테이블 조인에 인덱스를 사용함
+* 조인에 사용할 두번째 테이블 생성
 
+![img_27.png](img_27.png)
+
+* 인덱스가 하나 있음, PK 는 symbol 열
+* elem 테이블의 a,b,c 열 값과 일치함
+* 조인 시각화 예시는 다음과 같다
+
+![img_28.png](img_28.png)
+
+* Mysql 은 a in(...) 조건에 인덱스를 사용함
+* 조인 테이블에 대한 인덱스 사용의 경우 두가지 사소한 차이가 있음
+  * where 절은 join..ON 절을 재적성한 것
+  * symbol 열의 조건값은 elem 에서 가져옴
+* explain 은 다음과 같다
+
+![img_29.png](img_29.png)
+
+조인의 경우 두번째 테이블에 2개의 새로운 세부 정보가 있다.
+
+* type : eq_ref
+  * PK 나 유니크 인덱스를 사용하는 단일 행 조회를 의미
+* ref : test.elem.a
+  * 참조열 elem.a 로 읽는다는 뜻
+* 조인 방법중 eq_ref 가 가장 빠름, 한 행만 일치해서!
+  * PK나 유니크 인덱스를 사용해야함
+
+다음은 문법상 같은데, In 목록에서 At 라는 단일값이 제거된 경우 예시
+
+![img_30.png](img_30.png)
+![img_31.png](img_31.png)
+
+* 완전히 새로운 EXPLAIN 출력이 나옴
+* elem.a 대신 elem_names.symbols 에 대한 값으로 IN 목록을 재작성함
+* elem_names.symbols 테이블의 인덱스 사용은 Ag 와 Au 의 두 값으로 조회하기 위한 범위 스캔임을 추정 가능
+
+인덱스 없이 테이블 조인 가능, "풀 조인", 최악의 작업
+
+![img_32.png](img_32.png)
+![img_33.png](img_33.png)
+
+* 일반적으로 MySQL은 이 쿼리 실행 계획을 선택하지 않아서 IGNORE INDEX 로 강제 실행한것
+* Extra 필드의 Using join buffer (hash join) 은 Mysql 8 에 새롭게 도입된 해시 조인 알고리즘
+  * 메모리 내 해싯값 테이블을 만들고, 반복되는 테이블 스캔을 수행하는 대신, 이 해시테이블을 사용해 행을 조회함
+  * 해시조인으로 성능이 비약적으로 향상됨, 그러나 가능한 피하셈
 
