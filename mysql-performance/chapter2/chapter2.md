@@ -165,7 +165,82 @@ EXPAIN 명령어는 Mysql이 쿼리를 실행하는 방법을 설명함
       * 즉 인덱스를 사용하여 값 범위 사이의 행을 읽음
       
 ![img_9.png](img_9.png)
-
 ![img_10.png](img_10.png)
 
+* 예제 2-5 쿼리에 idx_a_b 조건이 맨 왼쪽 접두사에 대한 요구사항을 충족함
+* 첫번째 쿼리는 a 열만 사용, 두번째 열은 a,b 사용
+* const 접근 유형은 불가함
+  * idx_a_b 가 비고유라 하나 이상의 행과 일치할 수 있음
+
 ![img_8.png](img_8.png)
+
+인덱스 조회와 인덱싱되지 않은 열에 대한 EXPAIN 결과는 다음과 같음
+
+![img_11.png](img_11.png)
+![img_12.png](img_12.png)
+
+* 인덱스를 사용하여 a 열의 조건에 대한 행을 조회하고 읽은 다음, c열의 조건과 일치하는 행을 찾음
+* where 절에 일치하는건 없는데 rows 3의 의미
+  * a열에 대한 인덱스 조회의 경우 참인 3개의 행을 찾았지만 c에 대해 일치하는게 없어서 그렇다
+
+맨 왼쪽 접두사가 충족되지 않은 경우는?
+
+![img_13.png](img_13.png)
+![img_14.png](img_14.png)
+
+* 인덱스 수행 불가 possible_keys: NULL, key:NULL
+* type: ALL 테이블 풀스캔
+* rows: 10 전체 행 수
+* 최악의 쿼리 예시이다~
+
+### Group By
+
+* 값이 인덱스 순서에 따라 암묵적으로 그룹화됨
+* Group By 를 최적화 하기 위해 인덱스를 사용할 수 있음
+* idx_a_b 에 대해 a열은 다음과 같이 5개의 개별 그룹을 가짐
+
+![img_15.png](img_15.png)
+
+group by a에 대한 explain 계획
+
+![img_16.png](img_16.png)
+
+* `key: idx_a_b`
+  * 인덱스를 사용하여 그룹화
+* `Extra: Using index`
+  * a열의 값만 읽음, 프라이머리 키에서 젠체 행을 읽지 않음
+* `type: index`
+  * 인덱스 스캔을 나타냄, 인덱스를 사용하지만 인덱스 조회는 아님
+* `rows: 10`
+  * where 절이 없어서 Mysql 이 모든 행을 읽음
+
+a 열에 where 절을 추가하면?
+
+![img_17.png](img_17.png)
+
+* `Extra: Using where`
+  * WHERE a != 'Ar' 을 나타냄
+* `type: range`
+  * != 연산자로 인해 범위 접근 유형으로 바뀜
+  * 이해를 돕기위한 아래 그림 참조
+  * ![img_18.png](img_18.png)
+* Where 절에 b 조건만 있어도 멘 왼쪽 접두사 요구사항이 충족된다.
+  * 아래 그림 참조
+  * ![img_19.png](img_19.png)
+
+맨 왼쪽 접두사가 없는 Group By는?
+
+![img_20.png](img_20.png)
+
+* 쿼리가 a 열에 조건이 없어도 인덱스를 사용한다?
+  * Mysql 이 a 열의 인덱스를 스캔하고 있어서 맨 왼쪽 접두사가 충족됨
+* group by c는 안됨
+  * 인덱스에 b 열 값은 있지만 c 열 값은 없음
+* Extra: Using temporary
+  * 왼쪽 접두사 세트를 가지지 않아서 그렇다
+  * 인덱스에서 a 열 값을 읽을때, 임시테이블 에서 b 열 값을 수집함
+  * a열 값을 모두 읽은 후에는 count(*)에 의해 그룹화되고 집계된 임시 테이블에 대해 테이블 스캔
+
+### Order By
+
+
