@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="편견은 질문으로 흔들고, 사람은 들어줄 때 바뀐다. 싱크 어게인 6, 7장을 그림, 표, 개발자 시나리오로 풀었다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+<title>싱크 어게인 6, 7장 그림 해설</title>
+<style>
+/* 레이아웃: 860px 한 단, 장마다 요약 카드 → 비유 → 그림 → 비교표 → 개발자 시나리오 */
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --ink: #1b2129; --muted: #67707c; --line: #e2e5ea;
+  --ok: #157f3b; --ok-bg: #e7f5ec; --bad: #b42318; --bad-bg: #fdeceb;
+  --wait: #976400; --wait-bg: #fff3d4; --accent: #2b56c9; --accent-bg: #e9efff;
+  --font-body: "Noto Sans KR", Pretendard, "Apple SD Gothic Neo", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14171b; --card: #1c2025; --ink: #e7e9ec; --muted: #9aa2ad; --line: #323840;
+    --ok: #5cc985; --ok-bg: #16301f; --bad: #ff7d70; --bad-bg: #391c1a;
+    --wait: #e8b94c; --wait-bg: #382d12; --accent: #8eaaff; --accent-bg: #1e2945;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14171b; --card: #1c2025; --ink: #e7e9ec; --muted: #9aa2ad; --line: #323840;
+  --ok: #5cc985; --ok-bg: #16301f; --bad: #ff7d70; --bad-bg: #391c1a;
+  --wait: #e8b94c; --wait-bg: #382d12; --accent: #8eaaff; --accent-bg: #1e2945;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); line-height: 1.75; font-size: 16px; }
+main { max-width: 860px; margin: 0 auto; padding: 40px 16px 80px; }
+h1 { font-size: 30px; margin: 0 0 6px; letter-spacing: -0.02em; text-wrap: balance; }
+.sub { color: var(--muted); margin: 0 0 20px; }
+nav.toc { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+nav.toc a { border: 1px solid var(--line); background: var(--card); color: var(--ink); text-decoration: none; border-radius: 999px; padding: 6px 14px; font-size: 14px; }
+nav.toc a:hover, nav.toc a:focus-visible { border-color: var(--accent); color: var(--accent); }
+.chapter { margin-top: 56px; padding-top: 8px; border-top: 3px solid var(--ink); }
+.chapter .kicker { color: var(--accent); font-weight: 700; font-size: 14px; letter-spacing: .02em; margin-top: 14px; }
+.chapter h1 { margin-top: 2px; }
+h2 { font-size: 21px; margin: 44px 0 6px; letter-spacing: -0.01em; text-wrap: balance; }
+h2 .n { color: var(--muted); font-weight: 500; margin-right: 8px; font-variant-numeric: tabular-nums; }
+h3 { font-size: 16px; margin: 0 0 8px; }
+p { margin: 8px 0; }
+.lead { color: var(--muted); margin: 0 0 12px; max-width: 65ch; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; margin: 14px 0; }
+.scroll { overflow-x: auto; }
+.tldr { border-left: 4px solid var(--accent); }
+.tldr b { color: var(--accent); margin-right: 6px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+figure { margin: 0; }
+figcaption { color: var(--muted); font-size: 13.5px; margin-top: 10px; }
+svg { display: block; width: 100%; height: auto; }
+svg.wide { min-width: 620px; }
+svg text { fill: var(--ink); font-size: 13px; font-family: var(--font-body); }
+svg .muted { fill: var(--muted); } svg .ok { fill: var(--ok); } svg .bad { fill: var(--bad); } svg .wait { fill: var(--wait); } svg .acc { fill: var(--accent); }
+svg .b { font-weight: 700; }
+
+.flow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.box { border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 14px; background: var(--card); font-size: 14px; min-width: 110px; text-align: center; }
+.box small { display: block; color: var(--muted); font-size: 12px; }
+.box.ok { border-color: var(--ok); background: var(--ok-bg); }
+.box.bad { border-color: var(--bad); background: var(--bad-bg); }
+.box.wait { border-color: var(--wait); background: var(--wait-bg); }
+.box.acc { border-color: var(--accent); background: var(--accent-bg); }
+.arrow { color: var(--muted); font-size: 20px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 680px) { .two { grid-template-columns: 1fr; } }
+.panel { border: 1.5px solid var(--line); border-radius: 12px; padding: 16px; }
+.panel.bad { border-color: var(--bad); }
+.panel.ok { border-color: var(--ok); }
+.panel .label { font-size: 12.5px; font-weight: 700; }
+.panel.bad .label { color: var(--bad); } .panel.ok .label { color: var(--ok); }
+.verdict { margin-top: 10px; font-weight: 600; font-size: 14.5px; }
+.verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); }
+
+/* 막대 비교 */
+.bars { display: flex; flex-direction: column; gap: 12px; }
+.bar { display: grid; grid-template-columns: 170px 1fr; gap: 12px; align-items: center; font-size: 14px; }
+@media (max-width: 520px) { .bar { grid-template-columns: 1fr; gap: 4px; } }
+.track { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; height: 30px; position: relative; overflow: hidden; }
+.fill { height: 100%; border-radius: 7px 0 0 7px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-weight: 700; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.fill.ok { background: var(--ok-bg); color: var(--ok); border-right: 3px solid var(--ok); }
+.fill.bad { background: var(--bad-bg); color: var(--bad); border-right: 3px solid var(--bad); }
+.fill.acc { background: var(--accent-bg); color: var(--accent); border-right: 3px solid var(--accent); }
+.fill.wait { background: var(--wait-bg); color: var(--wait); border-right: 3px solid var(--wait); }
+
+.paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; }
+.path { border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px 10px 50px; position: relative; font-size: 14.5px; }
+.path small { display: block; color: var(--muted); font-size: 13px; }
+.pid { position: absolute; left: 10px; top: 11px; background: var(--ink); color: var(--bg); border-radius: 6px; font-size: 12px; font-weight: 700; padding: 2px 6px; }
+
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { color: var(--muted); font-weight: 600; font-size: 12.5px; line-height: 1.4; }
+table.cmp th, table.cmp td { text-align: center; }
+table.cmp th:first-child, table.cmp td:first-child { text-align: left; }
+table.cmp td { font-size: 17px; }
+table.cmp td:first-child { font-size: 14px; font-weight: 600; }
+table.cmp td small { display: block; font-size: 11.5px; color: var(--muted); }
+table.cmp tr.best td { background: var(--ok-bg); }
+table.txt td { font-size: 14px; text-align: left; vertical-align: top; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; margin-bottom: 12px; }
+details { border-top: 1px solid var(--line); padding: 8px 0; }
+details summary { cursor: pointer; font-weight: 600; font-size: 14.5px; }
+details p { margin: 8px 0 4px; font-size: 14.5px; }
+
+.dialog { display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; margin: 8px 0 0; }
+.dialog .line { display: grid; grid-template-columns: 64px 1fr; gap: 8px; }
+.dialog .who { color: var(--muted); font-size: 13px; font-weight: 700; padding-top: 1px; }
+.tech { display: inline-block; font-size: 12px; font-weight: 700; color: var(--accent); background: var(--accent-bg); border-radius: 999px; padding: 0 8px; margin-right: 4px; }
+.why { margin-top: 12px; padding: 10px 14px; background: var(--accent-bg); border-radius: 10px; font-size: 14.5px; }
+.note { color: var(--muted); font-size: 13.5px; }
+ol.check { padding-left: 22px; margin: 0; } ol.check li { margin: 6px 0; }
+.cast-title { font-weight: 700; margin: 0 0 10px; }
+.cast { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+.who-card { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; font-size: 14px; line-height: 1.5; }
+.who-card .role { font-size: 12px; color: var(--accent); font-weight: 600; }
+.who-card p { margin: 4px 0 0; font-size: 13.5px; }
+.who-card p.ex { color: var(--muted); }
+.who-card .where { margin-top: 4px; font-size: 12px; color: var(--muted); text-decoration: none; }
+.who-card .where::before { content: "→ "; }
+.who-card .where:hover { color: var(--accent); }
+.cover { background: #1d3fa6; color: #ffffff; }
+.cover-in { max-width: 1200px; margin: 0 auto; padding: 56px 24px 48px; display: grid; grid-template-columns: 1fr 300px; gap: 32px; align-items: center; }
+.cover-kicker { margin: 0; font-size: 22px; font-weight: 700; color: #ffd166; letter-spacing: .02em; }
+.cover-title { margin: 10px 0 22px; font-size: clamp(44px, 7.5vw, 92px); line-height: 1.08; letter-spacing: -0.03em; font-weight: 900; color: #ffffff; text-wrap: balance; }
+.cover-lines { list-style: none; margin: 0 0 26px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.cover-lines li { font-size: clamp(22px, 3.4vw, 40px); font-weight: 900; line-height: 1.3; }
+.cover-title { -webkit-text-stroke: 3px #ffffff; paint-order: stroke fill; }
+.cover-lines li { -webkit-text-stroke: .6px #ffffff; paint-order: stroke fill; }
+.cover-kicker { -webkit-text-stroke: .6px #ffd166; }
+.cover-lines span { -webkit-text-stroke: .5px #1b2129; display: inline-block; background: #ffd166; color: #1b2129; border-radius: 10px; padding: 0 12px; margin-right: 12px; font-size: .8em; vertical-align: 2px; }
+main > .toc { margin: 0 0 8px; }
+.cover .toc a { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.35); color: #ffffff; }
+.cover .toc a:hover, .cover .toc a:focus-visible { background: #ffffff; color: #1d3fa6; }
+.cover-art { width: 100%; height: auto; }
+svg.cover-art text.art-q { font-size: 60px; font-weight: 900; fill: #1d3fa6; stroke: #1d3fa6; stroke-width: 3px; }
+svg.cover-art text.art-a { font-size: 42px; font-weight: 900; fill: #1b2129; stroke: #1b2129; stroke-width: 2px; }
+@media (min-width: 900px) { .cover-in { min-height: 630px; padding-top: 40px; padding-bottom: 40px; grid-template-columns: 1fr 360px; } }
+@media (max-width: 760px) { .cover-in { grid-template-columns: 1fr; } .cover-art { display: none; } }
+.toggle { position: absolute; top: 14px; right: 14px; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 6px 12px; font-size: 13px; cursor: pointer; font-family: var(--font-body); }
+</style>
+</head>
+<body>
+<button class="toggle" id="t" type="button">다크/라이트 전환</button>
+<header class="cover">
+  <div class="cover-in">
+    <div class="cover-text">
+      <p class="cover-kicker">싱크 어게인 · 그림 해설</p>
+      <h1 class="cover-title">6장, 7장<br>한 장으로 보기</h1>
+      <ul class="cover-lines">
+        <li><span>6장</span>편견은 질문으로 흔든다</li>
+        <li><span>7장</span>사람은 들어줄 때 바뀐다</li>
+      </ul>
+    </div>
+    <svg class="cover-art" viewBox="0 0 360 360" role="img" aria-label="두 사람이 마주 보고, 한 사람은 질문하고 다른 사람은 생각을 바꾼다">
+      <rect x="20" y="40" width="190" height="96" rx="22" fill="#ffffff"/>
+      <polygon points="70,134 100,134 64,170" fill="#ffffff"/>
+      <text x="115" y="108" text-anchor="middle" class="art-q">왜?</text>
+      <rect x="180" y="170" width="160" height="80" rx="22" fill="#ffd166"/>
+      <polygon points="290,248 318,248 304,282" fill="#ffd166"/>
+      <text x="260" y="226" text-anchor="middle" class="art-a">음…</text>
+      <circle cx="80" cy="250" r="34" fill="#ffffff"/>
+      <rect x="40" y="290" width="80" height="60" rx="30" fill="#ffffff"/>
+      <circle cx="292" cy="312" r="30" fill="#ffd166"/>
+      <rect x="258" y="346" width="68" height="14" rx="7" fill="#ffd166"/>
+    </svg>
+  </div>
+</header>
+<main>
+<nav class="toc" aria-label="장 이동">
+  <a href="#ch6">6장 다이아몬드에 묻은 나쁜 피</a>
+  <a href="#ch7">7장 백신을 속삭이는 사람</a>
+  <a href="#both">두 장을 한 장으로</a>
+</nav>
+
+<!-- ======================= 6장 ======================= -->
+<section class="chapter" id="ch6">
+<p class="kicker">6장 · 고정관념을 흔들어서 편견을 줄이다</p>
+<h1>다이아몬드에 묻은 나쁜 피</h1>
+
+<div class="card tldr">
+  <p><b>한 줄 요약</b>사람은 "저쪽 집단"을 미워하면서 자기 정체성을 지키고, 그 미움은 같은 편끼리 모일수록 단단해진다.</p>
+  <p><b>안 통하는 것</b>공통점 강조, 좋은 사람 한 명 소개. 개인은 돕게 되지만 집단에 대한 생각은 그대로다.</p>
+  <p><b>통하는 것</b>"내가 저쪽에서 태어났다면?"이라고 묻게 해서 미움의 근거가 우연임을 스스로 깨닫게 하기. 비교는 <a href="#cmp6">5번</a>.</p>
+</div>
+
+<div class="card">
+  <p class="cast-title">등장인물</p>
+  <div class="cast">
+    <div class="who-card"><b>대릴 데이비스</b><span class="role">흑인 피아니스트</span><p>KKK 단원과 친구가 되어 탈퇴시킴</p><a href="#daryl" class="where">6번</a></div>
+    <div class="who-card"><b>고위 키클롭스</b><span class="role">KKK 간부</span><p>대릴의 질문에 말문이 막히고 탈퇴</p><a href="#daryl" class="where">6번</a></div>
+    <div class="who-card"><b>레드삭스 대 양키스</b><span class="role">미국 야구 최대 라이벌</span><p>이 장 실험 대부분의 주인공</p><a href="#cmp6" class="where">2~5번</a></div>
+    <div class="who-card"><b>조지 켈리</b><span class="role">심리학자</span><p>믿음 = VR 고글 비유</p><a href="#ch6-1" class="where">1번</a></div>
+    <div class="who-card"><b>맨유 팬 실험</b><span class="role">가설 1</span><p>넘어진 라이벌 팬을 돕는가</p><a href="#ch6-4" class="where">4번</a></div>
+    <div class="who-card"><b>듀크대 취준생 실험</b><span class="role">가설 2</span><p>라이벌 학교 학생의 입사지원서 돕기</p><a href="#ch6-4" class="where">4번</a></div>
+    <div class="who-card"><b>허버트 켈만</b><span class="role">평화심리학자</span><p>이스라엘, 팔레스타인 지도자 워크숍</p><a href="#ch6-4" class="where">4번</a></div>
+    <div class="who-card"><b>테세우스의 배</b><span class="role">철학 질문</span><p>부품이 다 바뀐 배도 같은 배인가</p><a href="#ch6-4" class="where">4번</a></div>
+    <div class="who-card"><b>점성술 창업자</b><span class="role">스타트업 대표</span><p>"중국에서 태어났다면?" 질문을 받음</p><a href="#cmp6" class="where">5번</a></div>
+  </div>
+</div>
+
+<h2 id="ch6-1"><span class="n">1</span>비유로 보면: 금 간 VR 고글</h2>
+<p class="lead">심리학자 조지 켈리는 믿음을 가상현실 고글에 비유했다. 세상은 고글을 통해서만 보인다.</p>
+<div class="card">
+  <div class="flow">
+    <div class="box">고글을 쓴다<small>고정관념 형성</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box wait">반대 증거로 금이 간다<small>견해가 위협받음</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box bad">고글을 안 벗고<br>정신을 비튼다<small>방어 자세, 적대감</small></div>
+  </div>
+  <p class="note" style="margin-top:12px">사람은 자기 의견이 틀렸음을 알면서도 그 의견을 지키려 할 때 특히 적대적이 된다.</p>
+</div>
+
+<h2><span class="n">2</span>사소한 경계선 하나로도 편이 갈린다</h2>
+<p class="lead">"핫도그는 샌드위치인가?" 의견이 같은 사람과 다른 사람에게 돈을 나눠 주라고 했다.</p>
+<div class="card">
+  <div class="bars">
+    <div class="bar"><span>같은 편 2달러<br>다른 편 1달러</span><div class="track"><div class="fill bad" style="width:71%">71%</div></div></div>
+    <div class="bar"><span>같은 편 3달러<br>다른 편 4달러</span><div class="track"><div class="fill ok" style="width:29%">29%</div></div></div>
+  </div>
+  <p class="note" style="margin-top:12px">71%는 자기 편이 1달러 덜 받더라도 상대가 덜 받는 쪽을 골랐다. 같은 원리로 레드삭스 팬은 자기 팀 응원에 503달러, 양키스 조롱에 560달러를 쓰겠다고 답했다.</p>
+</div>
+
+<h2><span class="n">3</span>편견이 굳어 가는 길 4개</h2>
+<p class="lead">이 ID가 아래 비교표의 열이 된다.</p>
+<div class="card"><div class="paths">
+  <div class="path"><span class="pid">P1</span><b>우리 대 저들</b><small>"나는 저쪽이 아니다"로 자기를 규정한다. 이기면 "우리가 이겼다", 지면 "선수들이 졌다".</small></div>
+  <div class="path"><span class="pid">P2</span><b>금 간 고글 지키기</b><small>견해가 위협받으면 방어한다. 구단이 "경기일 뿐"이라고 달래면 오히려 더 공격적이 된다.</small></div>
+  <div class="path"><span class="pid">P3</span><b>집단극화</b><small>같은 편끼리 이야기하면 의견이 더 극단으로 간다. 주변부는 가장 극단적인 사람을 따른다.</small></div>
+  <div class="path"><span class="pid">P4</span><b>예외 처리</b><small>좋은 개인을 만나면 "저 사람은 그쪽 같지 않아"로 빼 버린다. 고정관념은 무사하다.</small></div>
+</div></div>
+
+<figure class="card scroll">
+<svg class="wide" viewBox="0 0 720 210" role="img" aria-label="집단극화: 같은 편끼리 대화한 뒤 두 집단의 의견이 가운데에서 양 끝으로 멀어진다">
+  <defs><marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
+  <text x="20" y="40" class="muted">대화 전</text>
+  <line x1="110" y1="36" x2="700" y2="36" stroke="var(--line)" stroke-width="2"/>
+  <circle cx="300" cy="36" r="9" fill="var(--bad)"/><circle cx="330" cy="36" r="9" fill="var(--bad)"/><circle cx="355" cy="36" r="9" fill="var(--bad)"/>
+  <circle cx="440" cy="36" r="9" fill="var(--accent)"/><circle cx="465" cy="36" r="9" fill="var(--accent)"/><circle cx="495" cy="36" r="9" fill="var(--accent)"/>
+  <line x1="320" y1="56" x2="190" y2="122" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ah1)"/>
+  <line x1="470" y1="56" x2="600" y2="122" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ah1)"/>
+  <text x="250" y="96" text-anchor="end" class="muted">같은 편끼리 대화</text>
+  <text x="540" y="96" class="muted">같은 편끼리 대화</text>
+  <text x="20" y="150" class="muted">대화 후</text>
+  <line x1="110" y1="146" x2="700" y2="146" stroke="var(--line)" stroke-width="2"/>
+  <circle cx="125" cy="146" r="9" fill="var(--bad)"/><circle cx="150" cy="146" r="9" fill="var(--bad)"/><circle cx="175" cy="146" r="9" fill="var(--bad)"/>
+  <circle cx="620" cy="146" r="9" fill="var(--accent)"/><circle cx="645" cy="146" r="9" fill="var(--accent)"/><circle cx="670" cy="146" r="9" fill="var(--accent)"/>
+  <text x="150" y="182" text-anchor="middle" class="bad b">레드삭스 팬</text>
+  <text x="645" y="182" text-anchor="middle" class="acc b">양키스 팬</text>
+  <text x="405" y="182" text-anchor="middle" class="muted">가운데가 비어 버린다</text>
+</svg>
+<figcaption>P3 집단극화. 생각이 같은 사람끼리 모이면 처음보다 더 극단적인 견해를 갖게 된다. 배심원, 이사회, 정치 토론에서 수백 번 확인됐다.</figcaption>
+</figure>
+
+<h2 id="ch6-4"><span class="n">4</span>저자가 시험한 세 가지 가설</h2>
+<p class="lead">레드삭스 팬과 양키스 팬을 대상으로 하나씩 시도했다.</p>
+
+<div class="card">
+  <h3>가설 1. 공동의 리그: "우리 모두 야구팬"</h3>
+  <p>우주비행사는 지구를 내려다보면 인류 전체를 하나로 느낀다(조망효과). 이걸 팬들에게 심어 보려 했다.</p>
+  <div class="bars" style="margin-top:12px">
+    <div class="bar"><span>자기 팀 사랑 이유를 쓴 집단</span><div class="track"><div class="fill bad" style="width:30%">30%</div></div></div>
+    <div class="bar"><span>두 팀 공통점을 쓴 집단</span><div class="track"><div class="fill ok" style="width:70%">70%</div></div></div>
+  </div>
+  <p class="note">맨유 팬 실험. 라이벌 셔츠를 입은 사람이 넘어졌을 때 도운 비율.</p>
+  <p class="verdict bad">결과: 긴급 상황의 도움은 늘지만 평소 고정관념은 그대로. "개네도 야구를 사랑하지만 잘못된 팀을 응원하잖아요."</p>
+</div>
+
+<div class="card">
+  <h3>가설 2. 적에게 연민 느끼기: 좋은 양키스 팬 한 명 소개</h3>
+  <figure class="scroll">
+  <svg class="wide" viewBox="0 0 680 190" role="img" aria-label="예외 처리: 좋은 개인 한 명이 집단 상자 밖으로 빠지고 집단 상자의 꼬리표는 바뀌지 않는다">
+    <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ok)"/></marker></defs>
+    <rect x="30" y="30" width="300" height="130" rx="14" fill="var(--bad-bg)" stroke="var(--bad)" stroke-width="1.5"/>
+    <text x="180" y="56" text-anchor="middle" class="bad b">양키스 팬 = 거만한 찌질이</text>
+    <circle cx="90" cy="105" r="13" fill="var(--bad)" opacity=".7"/><circle cx="140" cy="118" r="13" fill="var(--bad)" opacity=".7"/>
+    <circle cx="190" cy="100" r="13" fill="var(--bad)" opacity=".7"/><circle cx="240" cy="122" r="13" fill="var(--bad)" opacity=".7"/>
+    <circle cx="285" cy="104" r="13" fill="none" stroke="var(--ok)" stroke-width="2" stroke-dasharray="4 3"/>
+    <line x1="302" y1="104" x2="470" y2="104" stroke="var(--ok)" stroke-width="2" marker-end="url(#ah2)"/>
+    <text x="386" y="92" text-anchor="middle" class="ok">"이 사람은 달라"</text>
+    <circle cx="500" cy="104" r="15" fill="var(--ok)"/>
+    <text x="500" y="146" text-anchor="middle" class="ok b">좋은 양키스 팬</text>
+    <text x="500" y="166" text-anchor="middle" class="muted">"양키스 팬 같지 않아"</text>
+    <text x="180" y="182" text-anchor="middle" class="muted">상자의 꼬리표는 그대로 남는다</text>
+  </svg>
+  </figure>
+  <p>노스캐롤라이나대 학생에게 라이벌 듀크대 취준생의 입사지원서를 돕게 한 실험도 같았다. 사정에 공감한 참가자는 그 학생을 더 오래 도왔지만 "듀크 학생들"은 여전히 경쟁자였다. 허버트 켈만의 이스라엘, 팔레스타인 지도자 워크숍에서도 개인끼리는 신뢰했지만 상대 집단에 대한 고정관념은 남았다.</p>
+  <p class="verdict bad">결과: 개인은 좋아하게 되지만 예외로 분류된다(P4).</p>
+</div>
+
+<div class="card">
+  <h3>가설 3. 습관의 야수들: 미움이 얼마나 우연한지 되짚기</h3>
+  <p>테세우스의 배처럼 구단은 선수, 코치, 구단주, 경기장이 다 바뀌어도 이름만 남는다. 사인펠드의 말대로 팬은 "유니폼을 응원"한다. 보스턴에서 태어나 양키스를 미워하는 건 출생이라는 우연의 결과다.</p>
+  <div class="flow" style="margin-top:10px">
+    <div class="box">상대 팬 장단점<br>3개씩 쓰기</div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box acc">"상대 팀 가정에서<br>태어났다면?"<small>절반만 이 단계 추가</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box ok">덜 매운 핫소스<br>더 쉬운 산수 문제<small>상대 팀에게 고른 것</small></div>
+  </div>
+  <p class="verdict ok">결과: 상대 팀 전체를 보는 견해가 바뀌었다. 상대 팀 셔츠 입기, 상대 선수에게 올스타 투표하기까지 늘었다. 핵심은 상대의 장점이 아니라 자기 적대감에 근거가 없다는 깨달음이었다.</p>
+</div>
+
+<figure class="card scroll">
+<svg class="wide" viewBox="0 0 720 230" role="img" aria-label="고정관념의 진행 시간표: 경험, 형성, 새 경험, 그 고정관념 의심, 고정관념 일반 의심의 다섯 계단">
+  <line x1="30" y1="200" x2="700" y2="200" stroke="var(--muted)" stroke-width="1.5"/>
+  <text x="690" y="220" text-anchor="end" class="muted">시간 흐름 →</text>
+  <rect x="30"  y="150" width="130" height="40" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+  <text x="95" y="175" text-anchor="middle">① 어떤 경험</text>
+  <rect x="165" y="150" width="130" height="40" rx="8" fill="var(--bad-bg)" stroke="var(--bad)" stroke-width="1.5"/>
+  <text x="230" y="175" text-anchor="middle" class="bad">② 고정관념 형성</text>
+  <rect x="300" y="110" width="130" height="40" rx="8" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+  <text x="365" y="135" text-anchor="middle">③ 새로운 경험</text>
+  <rect x="435" y="70" width="130" height="40" rx="8" fill="var(--wait-bg)" stroke="var(--wait)" stroke-width="1.5"/>
+  <text x="500" y="95" text-anchor="middle" class="wait">④ 그 관념 의심</text>
+  <rect x="570" y="30" width="130" height="40" rx="8" fill="var(--ok-bg)" stroke="var(--ok)" stroke-width="1.5"/>
+  <text x="635" y="55" text-anchor="middle" class="ok">⑤ 관념 일반 의심</text>
+</svg>
+<figcaption>책의 그림을 옮겼다. 예: 그 집단 아이가 자전거를 훔쳤다 → "그 집단 아이들은 도둑" → 그 집단 아이가 친절을 베풀었다 → "모두 나쁘진 않을지도" → "누구도 겉모습으로 판단할 수 없다". 가설 2는 ③에서 멈추고, 가설 3은 ④와 ⑤까지 간다.</figcaption>
+</figure>
+
+<h2 id="cmp6"><span class="n">5</span>세 가설 비교: 무엇을 바꾸나</h2>
+<div class="card">
+  <p><b>표를 읽는 법</b> 편견이 풀리는 정도를 세 단계로 나눠서, 각 방법이 어디까지 갔는지 본다. 레드삭스 팬이 양키스 팬을 대하는 장면으로 예를 들면 이렇다.</p>
+  <div class="flow" style="margin-top:12px">
+    <div class="box">① 위기 때 돕는다<small>넘어진 양키스 팬을<br>일으켜 준다</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box">② 그 사람을 좋게 본다<small>"이 양키스 팬은<br>괜찮은 사람이네"</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box ok">③ 집단 전체를 다시 본다<small>"양키스 팬이 다 찌질이는<br>아니구나"</small></div>
+  </div>
+  <p class="note" style="margin-top:12px">①과 ②는 눈앞의 한 사람에 대한 반응이고, 이 장의 목표인 편견 해소는 ③이다. ②까지 가도 ③으로 못 넘어가는 이유가 P4 예외 처리다.</p>
+</div>
+<div class="card scroll">
+  <div class="legend"><span>✅ 됐다</span><span>⚠️ 대체로 됐다</span><span>❌ 안 됐다</span></div>
+  <table class="cmp">
+    <tr><th>방법</th><th>① 위기 때 돕는다<br><span style="font-weight:400">넘어진 상대를 도움</span></th><th>② 그 사람을 좋게 본다<br><span style="font-weight:400">눈앞의 한 명</span></th><th>③ 집단 전체를 다시 본다<br><span style="font-weight:400">편견 해소</span></th><th>막아 낸 길<br><span style="font-weight:400">3번의 P1~P4</span></th></tr>
+    <tr><td>가설 1. 공통 정체성</td><td>✅<small>도움 30% → 70%</small></td><td>❌<small>평소엔 여전히 "찌질이"</small></td><td>❌</td><td style="font-size:13px">P1 우리 대 저들<small>위기 때만</small></td></tr>
+    <tr><td>가설 2. 개인에 대한 연민</td><td>✅<small>더 오래 도움</small></td><td>✅<small>"믿음직한 사람"</small></td><td>❌<small>"양키스 팬 같지 않아"</small></td><td style="font-size:13px">없음<small>P4 예외 처리에 막힘</small></td></tr>
+    <tr class="best"><td>가설 3. 미움의 우연성 되짚기</td><td>✅</td><td>✅</td><td>✅<small>덜 매운 핫소스, 쉬운 문제</small></td><td style="font-size:13px">P1 우리 대 저들<br>P2 고글 지키기</td></tr>
+    <tr><td>반사실적 질문 + 직접 만남</td><td>✅</td><td>✅</td><td>⚠️<small>메타분석 94%에서 편견 감소</small></td><td style="font-size:13px">P2 고글 지키기<br>P3 집단극화<br>P4 예외 처리</td></tr>
+  </table>
+  <p class="note" style="margin-top:10px">"막아 낸 길"은 3번에서 본 편견이 굳는 길 네 가지(P1 우리 대 저들, P2 금 간 고글 지키기, P3 집단극화, P4 예외 처리) 중 그 방법이 끊어 낸 것이다.</p>
+</div>
+<div class="card">
+  <p><b>왜 이 칸인가</b></p>
+  <details><summary>가설 1: 위기 때만 통한다</summary><p>맨유 실험에서 공통점을 쓴 집단은 70%가 넘어진 라이벌 팬을 도왔다. 그러나 레드삭스와 양키스 팬에게 "야구팬"이라는 공통 정체성을 떠올리게 했을 때는 상대방을 더 긍정적으로 보지 않았다. 상대가 위험하거나 절박하지 않으면 그냥 "찌질이 한 명"으로 본다.</p></details>
+  <details><summary>가설 2: 개인은 바뀌고 집단은 안 바뀐다</summary><p>듀크 취준생 실험과 양키스 팬 이야기 실험 모두 "이 사람은 양키스 팬 같지 않다"는 반응이 나왔다. 상대를 잘 알수록 그를 집단과 별개의 존재로 본다.</p></details>
+  <details><summary>가설 3: 유일하게 집단 견해까지 바뀌었다</summary><p>적대감의 근거를 되짚은 참가자는 상대 팀 경기장 핫소스로 덜 매운 것을, 상대 팬에게 낼 산수 문제로 쉬운 것을 골랐다. 상대 팀 셔츠를 입거나 상대 팀을 소셜미디어에 등록한 사람도 있었다.</p></details>
+  <details><summary>반사실적 사고와 직접 만남: 대부분 통하지만 만병통치약은 아니다</summary><p>집단 간 접촉 메타분석(논문 500건 넘게, 참가자 25만 명)에서 94%의 경우 편견이 줄었다. 책도 "만병통치약은 아니지만 어마어마한 수치"라고 표현한다. 별자리로 사람을 판단하던 스타트업 창업자에게 저자가 물었던 것처럼 "중국에서 태어났다면?" 같은 질문이 방어를 우회한다.</p></details>
+</div>
+
+<h2 id="daryl"><span class="n">6</span>흑인 피아니스트 대릴 데이비스는 어떻게 KKK 단원 200명을 탈퇴시켰나</h2>
+<p class="lead">대릴은 KKK 단원을 직접 만나 대화했고, 그 뒤 KKK를 떠난 사람이 200명이 넘는다고 추산한다. 아래는 KKK 간부 "고위 키클롭스"와 나눈 대화를 그린 것이다.</p>
+<div class="card">
+  <div class="two">
+    <div class="panel bad">
+      <p class="label">흔한 대응</p>
+      <div class="flow" style="flex-direction:column;align-items:stretch;gap:6px">
+        <div class="box">"당신은 인종차별주의자다"</div>
+        <div class="box bad">방어, 재반박<small>P2 고글 지키기</small></div>
+      </div>
+      <p class="verdict bad">설교와 비판은 고글을 더 단단히 쓰게 한다.</p>
+    </div>
+    <div class="panel ok">
+      <p class="label">대릴의 방식</p>
+      <div class="flow" style="flex-direction:column;align-items:stretch;gap:6px">
+        <div class="box acc">"나를 알지도 못하면서<br>어떻게 미워할 수 있죠?"</div>
+        <div class="box acc">상대 논리를 그대로 되돌려주기<small>"당신도 연쇄살인범 유전자가 잠복해 있겠군요"</small></div>
+        <div class="box ok">스스로 다시 생각<small>몇 달 뒤 키클롭스는 탈퇴하고<br>자기 KKK 예복을 대릴에게 선물</small></div>
+      </div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:12px">대릴은 "단 한 사람도 개종시키지 못했다. 생각할거리를 주었을 뿐"이라고 말한다. 음악 같은 공통 관심사로 개인적 관계를 쌓고, 증오가 물려받은 것임을 스스로 깨닫게 했다.</p>
+</div>
+
+<h2><span class="n">7</span>개발 현장에 대입하면</h2>
+<p class="lead">지어낸 시나리오다. 실제 사례가 아니다.</p>
+
+<div class="card">
+  <h3>시나리오 A. "인프라팀은 원래 느려"</h3>
+  <div class="two">
+    <div class="panel bad"><p class="label">흔한 흐름</p>
+      <div class="dialog">
+        <div class="line"><span class="who">팀원</span><span>A님은 진짜 빠른데 인프라팀이 문제야.</span></div>
+      </div>
+      <p class="verdict bad">A는 예외(P4), 집단 고정관념은 강화</p>
+    </div>
+    <div class="panel ok"><p class="label">가설 3 + 반사실적 질문</p>
+      <div class="dialog">
+        <div class="line"><span class="who">TL</span><span>우리가 인프라팀이었으면 이 요청을 몇 번째로 처리했을까요?</span></div>
+        <div class="line"><span class="who">팀원</span><span>지난주 전사 보안 패치가 있었다던데요.</span></div>
+        <div class="line"><span class="who">TL</span><span>"느리다"가 아니라 "우선순위가 다르다"일 수도 있겠네요.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">상대 팀을 칭찬하라고 하지 않았다. 우리 불만의 근거가 얼마나 우연한지 되짚게 했다.</p>
+</div>
+
+<div class="card">
+  <h3>시나리오 B. 모놀리스 대 MSA 논쟁 (집단극화)</h3>
+  <p class="note">상황: 회의 전 각 진영이 자기들 슬랙 스레드에서 의견을 모아 와서 처음보다 더 강경하다(P3).</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">흔한 흐름</p>
+      <div class="dialog">
+        <div class="line"><span class="who">MSA파</span><span>모놀리스는 확장이 안 돼요. 다들 알잖아요.</span></div>
+        <div class="line"><span class="who">모놀리스파</span><span>MSA는 유행 따라가는 거고 운영비만 늘어요.</span></div>
+      </div>
+      <p class="verdict bad">서로 상대의 가장 극단적인 주장만 기억하고 끝난다</p>
+    </div>
+    <div class="panel ok"><p class="label">장단점 쓰기 + 반사실적 질문</p>
+      <div class="dialog">
+        <div class="line"><span class="who">진행자</span><span><span class="tech">장단점</span>각자 상대 방식의 장점과 단점을 세 개씩 적어 볼까요?</span></div>
+        <div class="line"><span class="who">MSA파</span><span>모놀리스 장점이요? …배포가 단순하다, 정도요.</span></div>
+        <div class="line"><span class="who">진행자</span><span><span class="tech">반사실</span>우리 팀이 3명이었다면, 100명이었다면 지금 선택이 그대로였을까요?</span></div>
+        <div class="line"><span class="who">MSA파</span><span>3명이면… 솔직히 모놀리스가 맞겠네요.</span></div>
+        <div class="line"><span class="who">모놀리스파</span><span>100명이면 배포 충돌 때문에 분리를 고민했을 것 같긴 해요.</span></div>
+        <div class="line"><span class="who">진행자</span><span>그럼 우리 팀이 지금 그 사이 어디쯤인지부터 같이 볼까요?</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">"누가 옳은가"가 "어떤 조건에서 무엇이 맞는가"로 바뀌었다. 같은 편끼리 굳힌 의견을 섞인 자리에서 풀었다.</p>
+</div>
+
+<div class="card">
+  <h3>시나리오 C. "그 ORM은 무조건 쓰레기"라는 시니어 (대릴식 질문)</h3>
+  <div class="two">
+    <div class="panel bad"><p class="label">데이터로 반박</p>
+      <div class="dialog">
+        <div class="line"><span class="who">주니어</span><span>요즘 버전은 벤치마크가 좋아요.</span></div>
+        <div class="line"><span class="who">시니어</span><span>벤치마크는 다 조작이야.</span></div>
+      </div>
+      <p class="verdict bad">들이밀수록 방어(P2)</p>
+    </div>
+    <div class="panel ok"><p class="label">논리를 되돌려주는 질문</p>
+      <div class="dialog">
+        <div class="line"><span class="who">주니어</span><span><span class="tech">진짜 궁금함</span>예전에 ORM 때문에 장애 났다는 얘기 들었어요. 그때 어떤 상황이었어요?</span></div>
+        <div class="line"><span class="who">시니어</span><span>ORM이니까 그렇지. 뒤에서 쿼리를 지 맘대로 만드니까 새벽에 터졌는데 무슨 쿼리가 나가는지도 몰랐어.</span></div>
+        <div class="line"><span class="who">주니어</span><span><span class="tech">반영</span>고치기 전에 무슨 쿼리가 나가는지조차 안 보였던 게 제일 위험하셨던 거네요.</span></div>
+        <div class="line"><span class="who">시니어</span><span>그렇지. 내가 짠 SQL은 내가 알잖아.</span></div>
+        <div class="line"><span class="who">주니어</span><span><span class="tech">공감</span>저도 뭐가 나가는지 모르는 게 제일 무서워요.</span></div>
+        <div class="line"><span class="who">시니어</span><span>맞아. 근데 다들 그걸 안 챙겨.</span></div>
+        <div class="line"><span class="who">주니어</span><span><span class="tech">배우는 질문</span>선배는 지금 쿼리 빌더 쓰실 때 쿼리가 몇 번 나가는지 어떻게 챙기세요? 그 방법 배우고 싶어요.</span></div>
+        <div class="line"><span class="who">시니어</span><span>쿼리 로그 찍고, 테스트에서 쿼리 횟수 세게 해 놨지. 그거 없으면 나도 못 믿어.</span></div>
+        <div class="line"><span class="who">주니어</span><span><span class="tech">도움 요청</span>그 방식을 ORM 쓸 때도 똑같이 걸어 두면 안전장치가 될까요? 선배가 한번 봐 주시면 좋겠어요.</span></div>
+        <div class="line"><span class="who">시니어</span><span>…로그 붙이면 볼 만은 하겠네. 모듈 하나로만 해 봐. 내가 리뷰할게.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">"ORM이라 그렇지"에 반박하지 않고, 그 밑의 진짜 걱정("쿼리가 안 보이는 게 위험하다")에 공감했다. 그다음 모순을 짚는 대신 선배의 방법을 배우겠다고 물었다. 선배가 자기 안전장치를 설명한 뒤에야 "그 장치를 ORM에도 걸면 어떨까"를 제안했고, 판단은 선배에게 맡겼다. 선배가 리뷰어로 참여하니 체면도 지켜진다.</p>
+</div>
+</section>
+
+<!-- ======================= 7장 ======================= -->
+<section class="chapter" id="ch7">
+<p class="kicker">7장 · 올바른 경청이 상대방을 변화시킨다</p>
+<h1>백신을 속삭이는 사람과 부드러운 태도의 심문자</h1>
+
+<div class="card tldr">
+  <p><b>한 줄 요약</b>설교, 반박, 데이터 폭격은 상대의 심리적 면역체계를 키워서 믿음을 더 단단하게 만든다.</p>
+  <p><b>대안</b>동기강화 면담. 묻고, 되비추고, 상대 입에서 나온 변화 발언을 붙잡고, 요약해서 다음 단계를 정한다.</p>
+  <p><b>핵심 태도</b>해법을 말하고 싶은 충동(교정반사)을 참고 안내자 자리에 선다. 비교는 <a href="#cmp7">4번</a>.</p>
+</div>
+
+<div class="card">
+  <p class="cast-title">등장인물</p>
+  <div class="cast">
+    <div class="who-card"><b>마리-엘렌</b><span class="role">백신 거부 엄마</span><p>조산한 아들 토비에게 백신을 안 맞힘</p><a href="#ch7-3" class="where">3번</a></div>
+    <div class="who-card"><b>아르노 가뇌르</b><span class="role">신생아 전문의</span><p>"백신을 속삭이는 사람", 경청으로 설득</p><a href="#ch7-3" class="where">3번</a></div>
+    <div class="who-card"><b>밀러와 롤닉</b><span class="role">동기강화 면담 창시자</span><p>중독 치료에서 이 방법을 만듦</p><a href="#ch7-2" class="where">2번</a></div>
+    <div class="who-card"><b>볼드모트 삼촌</b><span class="role">책의 가상 예시</span><p>질문만으로 흔드는 연습</p><a href="#ch7-2" class="where">2번</a></div>
+    <div class="who-card"><b>CEO 제프</b><span class="role">스타트업 대표</span><p>요약을 빠뜨려 실패한 사례</p><a href="#ch7-2" class="where">2번</a></div>
+    <div class="who-card"><b>베티 비곰베</b><span class="role">우간다 국회의원</span><p>반군 지도자 코니를 경청으로 협상장에</p><a href="#ch7-5" class="where">5번</a></div>
+  </div>
+</div>
+
+<h2><span class="n">1</span>비유로 보면: 백신과 심리적 면역체계</h2>
+<p class="lead">책의 비유다. 백신이 몸의 면역을 키우듯, 반박을 받아낸 경험은 마음의 면역을 키운다.</p>
+<figure class="card scroll">
+<svg class="wide" viewBox="0 0 720 250" role="img" aria-label="설교의 역효과 순환: 설교, 공격받는 느낌, 재반박 논리 준비, 믿음 강화, 다시 설교">
+  <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--bad)"/></marker></defs>
+  <rect x="40" y="30" width="200" height="54" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+  <text x="140" y="54" text-anchor="middle" class="b">설교, 데이터 폭격</text>
+  <text x="140" y="73" text-anchor="middle" class="muted">"백신은 안전합니다"</text>
+  <rect x="480" y="30" width="200" height="54" rx="10" fill="var(--wait-bg)" stroke="var(--wait)" stroke-width="1.5"/>
+  <text x="580" y="54" text-anchor="middle" class="wait b">공격받는 느낌</text>
+  <text x="580" y="73" text-anchor="middle" class="muted">"나쁜 엄마라는 거죠"</text>
+  <rect x="480" y="166" width="200" height="54" rx="10" fill="var(--wait-bg)" stroke="var(--wait)" stroke-width="1.5"/>
+  <text x="580" y="190" text-anchor="middle" class="wait b">재반박 논리 준비</text>
+  <text x="580" y="209" text-anchor="middle" class="muted">심리적 항체 생성</text>
+  <rect x="40" y="166" width="200" height="54" rx="10" fill="var(--bad-bg)" stroke="var(--bad)" stroke-width="1.5"/>
+  <text x="140" y="190" text-anchor="middle" class="bad b">믿음이 더 견고해짐</text>
+  <text x="140" y="209" text-anchor="middle" class="muted">다음 설교엔 안 놀람</text>
+  <line x1="246" y1="57" x2="472" y2="57" stroke="var(--bad)" stroke-width="2" marker-end="url(#ah3)"/>
+  <line x1="580" y1="90" x2="580" y2="158" stroke="var(--bad)" stroke-width="2" marker-end="url(#ah3)"/>
+  <line x1="474" y1="193" x2="248" y2="193" stroke="var(--bad)" stroke-width="2" marker-end="url(#ah3)"/>
+  <line x1="140" y1="160" x2="140" y2="92" stroke="var(--bad)" stroke-width="2" marker-end="url(#ah3)"/>
+  <text x="360" y="130" text-anchor="middle" class="muted">돌수록 더 단단해진다</text>
+</svg>
+<figcaption>독일 실험에서 백신 안전성 연구를 보여주자 사람들은 백신을 더 위험하게 봤다. 벌금 1,000달러, 징역 6개월 경고, 등교 금지도 거부 문제를 풀지 못했다.</figcaption>
+</figure>
+
+<h2 id="ch7-2"><span class="n">2</span>동기강화 면담의 흐름</h2>
+<p class="lead">빌 밀러와 스티븐 롤닉이 만든 방법이다. 남이 동기를 부여하면 성공 확률이 희박하니, 본인이 스스로 동기를 찾게 돕는다.</p>
+<figure class="card scroll">
+<svg class="wide" viewBox="0 0 760 230" role="img" aria-label="동기강화 면담 흐름: 개방형 질문, 반영적 경청, 변화 발언 붙잡기, 요약, 다음 단계">
+  <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker></defs>
+  <rect x="10"  y="40" width="130" height="62" rx="10" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+  <text x="75" y="66" text-anchor="middle" class="acc b">① 개방형 질문</text>
+  <text x="75" y="86" text-anchor="middle" class="muted">"어디서 들었어요?"</text>
+  <rect x="160" y="40" width="130" height="62" rx="10" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+  <text x="225" y="66" text-anchor="middle" class="acc b">② 반영적 경청</text>
+  <text x="225" y="86" text-anchor="middle" class="muted">"~가 걱정이시군요"</text>
+  <rect x="310" y="40" width="140" height="62" rx="10" fill="var(--ok-bg)" stroke="var(--ok)" stroke-width="1.5"/>
+  <text x="380" y="66" text-anchor="middle" class="ok b">③ 변화 발언</text>
+  <text x="380" y="86" text-anchor="middle" class="muted">소망, 역량 확인</text>
+  <rect x="470" y="40" width="130" height="62" rx="10" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="1.5"/>
+  <text x="535" y="66" text-anchor="middle" class="acc b">④ 요약</text>
+  <text x="535" y="86" text-anchor="middle" class="muted">빠진 것 확인</text>
+  <rect x="620" y="40" width="130" height="62" rx="10" fill="var(--ok-bg)" stroke="var(--ok)" stroke-width="1.5"/>
+  <text x="685" y="66" text-anchor="middle" class="ok b">다음 단계</text>
+  <text x="685" y="86" text-anchor="middle" class="muted">상대가 정함</text>
+  <line x1="142" y1="71" x2="156" y2="71" stroke="var(--accent)" stroke-width="2" marker-end="url(#ah4)"/>
+  <line x1="292" y1="71" x2="306" y2="71" stroke="var(--accent)" stroke-width="2" marker-end="url(#ah4)"/>
+  <line x1="452" y1="71" x2="466" y2="71" stroke="var(--accent)" stroke-width="2" marker-end="url(#ah4)"/>
+  <line x1="602" y1="71" x2="616" y2="71" stroke="var(--accent)" stroke-width="2" marker-end="url(#ah4)"/>
+  <path d="M380,108 C380,150 380,150 380,168" stroke="var(--wait)" stroke-width="2.5" fill="none" stroke-dasharray="2 4"/>
+  <text x="380" y="190" text-anchor="middle" class="wait b">황금실: 끝을 잡고 감아 당긴다</text>
+  <text x="380" y="210" text-anchor="middle" class="muted">현상 유지 발언 말고 변화 발언에 반응</text>
+  <path d="M535,108 L535,140" stroke="var(--bad)" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="560" y="136" class="bad">제프 사례에서 빠뜨린 단계</text>
+</svg>
+<figcaption>책의 세 가지 핵심 기법(개방형 질문, 반영적 경청, 소망과 변화 역량 확인)에 네 번째 기법인 요약을 더했다. 저자는 CEO 제프와의 대화에서 요약을 빠뜨렸고, 제프의 연설은 이사회 호응을 얻지 못해 회사는 문을 닫았다.</figcaption>
+</figure>
+
+<div class="card">
+  <p class="cast-title">용어 풀이 <span class="note">금연을 고민하는 친구와의 대화로</span></p>
+  <div class="cast">
+    <div class="who-card"><b>개방형 질문</b><span class="role">예, 아니오로 안 끝나는 질문</span><p class="ex">"담배 끊는 건 어떻게 생각해?"</p></div>
+    <div class="who-card"><b>반영적 경청</b><span class="role">상대 말을 내 말로 되짚기</span><p class="ex">"스트레스 풀 데가 없어질까 봐 걱정이구나?"</p></div>
+    <div class="who-card"><b>현상 유지 발언</b><span class="role">지금 그대로 가자는 말</span><p class="ex">"담배 피우면 스트레스가 풀려."</p></div>
+    <div class="who-card"><b>변화 발언</b><span class="role">바뀌고 싶다, 할 수 있다는 말</span><p class="ex">"숨이 차서 좀 끊고 싶긴 해."</p></div>
+    <div class="who-card"><b>요약</b><span class="role">이해한 걸 정리하고 다음 단계 묻기</span><p class="ex">"숨찬 게 싫다는 거지? 첫걸음으로 뭘 해볼래?"</p></div>
+  </div>
+  <p class="note" style="margin-top:10px">현상 유지 발언에 반박하면 그 말을 더 지키고, 변화 발언을 되짚으면 그 말이 커진다. 그래서 변화 발언이 "황금실"이다.</p>
+</div>
+
+<div class="card">
+  <h3>볼드모트를 따르는 삼촌과의 대화 (책의 예시)</h3>
+  <div class="two">
+    <div class="panel bad"><p class="label">설득 모드 (비교용으로 덧붙임)</p>
+      <div class="dialog">
+        <div class="line"><span class="who">당신</span><span>그분은 살인자예요. 당장 그만두세요.</span></div>
+        <div class="line"><span class="who">삼촌</span><span>넌 그분이 얼마나 위대한지 몰라.</span></div>
+      </div>
+      <p class="verdict bad">반박할수록 삼촌은 그분 편에 더 단단히 선다</p>
+    </div>
+    <div class="panel ok"><p class="label">질문 모드 (책의 예시)</p>
+    <div class="dialog">
+      <div class="line"><span class="who">당신</span><span><span class="tech">개방형 질문</span>그분 마음에 들지 않는 부분은 없나요?</span></div>
+      <div class="line"><span class="who">삼촌</span><span>사실 사람들 마구 죽이는 건 썩 좋아하지 않는 편이야.</span></div>
+      <div class="line"><span class="who">당신</span><span><span class="tech">반영적 경청</span>약간은 의심하시는 것 같은데, 완전히 내치지 못하는 이유가 뭐예요?</span></div>
+      <div class="line"><span class="who">삼촌</span><span>그분이 나를 죽이겠다고 할까 봐… 그게 두려워.</span></div>
+      <div class="line"><span class="who">당신</span><span><span class="tech">소망 확인</span>저라도 두려울 거예요. 그런데 삼촌은 그 위험을 감수할 만큼 중요한 원칙을 갖고 있지 않나요?</span></div>
+    </div>
+    </div>
+  </div>
+  <p class="why">한 번도 "그만둬요"라고 말하지 않는다. 거울을 앞에 두고 상대가 자기 모습을 보게 할 뿐이다.</p>
+</div>
+
+<h2 id="ch7-3"><span class="n">3</span>한 번의 대화가 만든 차이</h2>
+<div class="card">
+  <p><b>아르노 가뇌르(마리-엘렌을 설득한 신생아 전문의)의 산부인과 병동 연구</b> (출산 직후 산모의 백신 접종 의향)</p>
+  <div class="bars" style="margin-top:10px">
+    <div class="bar"><span>면담 전</span><div class="track"><div class="fill wait" style="width:72%">72%</div></div></div>
+    <div class="bar"><span>동기강화 면담 후</span><div class="track"><div class="fill ok" style="width:87%">87%</div></div></div>
+  </div>
+  <p class="note" style="margin-top:12px">후속 연구에서는 2년 뒤 아기가 모든 백신을 맞을 가능성이 9% 늘었다. 병동에서 단 한 번 나눈 대화의 결과다. 보건부는 이 프로그램에 수백만 달러를 투자했다.</p>
+  <p class="note">동기강화 면담은 1,000건 넘는 대조실험에 쓰였고 논문 네 개 중 세 개에서 의미 있는 효과가 나왔다. 이혼 부부 양육권 조정에서는 성공률이 기존 방식의 두 배였다.</p>
+</div>
+
+<div class="card">
+  <h3>백신 설득 대화: 의사들 대 아르노</h3>
+  <p class="note">책에 나온 흐름을 대화로 재구성했다. 대사는 원문 그대로가 아니다.</p>
+  <div class="two" style="margin-top:10px">
+    <div class="panel bad"><p class="label">다른 의사들 (전도사, 검사 모드)</p>
+      <div class="dialog">
+        <div class="line"><span class="who">의사</span><span>백신은 효과가 입증됐습니다. 안 맞히면 아이가 위험해져요.</span></div>
+        <div class="line"><span class="who">엄마</span><span>여러 백신을 한꺼번에 맞으면 부작용은요? 자폐증 얘기도 있던데…</span></div>
+        <div class="line"><span class="who">의사</span><span>그건 가짜뉴스예요. 접종 안 하면 위험하다는 것만 기억하세요.</span></div>
+      </div>
+      <p class="verdict bad">그녀의 질문에는 답하지 않고 일반적인 경고만 반복. "나쁜 엄마라고 공격받는 느낌"</p>
+    </div>
+    <div class="panel ok"><p class="label">아르노 (안내자 모드)</p>
+      <div class="dialog">
+        <div class="line"><span class="who">아르노</span><span><span class="tech">결정 존중</span>솔직히 토비가 홍역에 걸릴까 봐 두렵긴 해요. 그래도 결정은 어머니 몫이에요. 상황을 좀 더 알고 싶어요.</span></div>
+        <div class="line"><span class="who">아르노</span><span><span class="tech">개방형 질문</span>어디서 어떤 이야기를 듣고 걱정하게 되셨어요?</span></div>
+        <div class="line"><span class="who">엄마</span><span>인터넷에서 많이 읽었는데 어디서였는지는 기억이 안 나요.</span></div>
+        <div class="line"><span class="who">아르노</span><span><span class="tech">반영적 경청</span>정보가 워낙 많고 서로 달라서 뭐가 맞는지 알기 어려우셨겠어요.</span></div>
+        <div class="line"><span class="who">아르노</span><span><span class="tech">허락 구하기</span>제가 의사로서 아는 걸 말씀드려도 될까요?</span></div>
+        <div class="line"><span class="who">엄마</span><span>네, 말씀해 주세요.</span></div>
+        <div class="line"><span class="who">아르노</span><span>홍역 백신에는 아주 약해진 바이러스가 들어 있어서 증상이 미미해요. 자폐증을 일으킨다는 증거는 어디에도 없고요.</span></div>
+        <div class="line"><span class="who">아르노</span><span><span class="tech">자율성</span>한 번 잘 생각해 보세요. 어떤 선택을 하든 아이를 위하는 어머니 마음을 믿어요.</span></div>
+      </div>
+      <p class="verdict ok">마리-엘렌은 토비에게 접종했고, 세 아이와 조카들까지 맞혔다.</p>
+    </div>
+  </div>
+  <p class="why">마리-엘렌이 꼽은 결정적 순간은 정보가 아니라 "아이들이 건강하길 바라는 마음은 같은데, 백신을 맞히든 안 맞히든 내 결정을 존중한다"는 말이었다. 정보는 허락을 받은 뒤, 그녀가 던진 질문에 답하는 형태로만 줬다. 아르노는 "허락 없이 정보를 던지면 한 귀로 듣고 흘린다"고 말한다.</p>
+</div>
+
+<h2 id="cmp7"><span class="n">4</span>네 가지 모드 비교</h2>
+<p class="lead">사람을 바꾸려 할 때 빠지기 쉬운 모드와 동기강화 면담을 나란히 놓았다.</p>
+<div class="card scroll">
+  <table class="txt">
+    <tr><th>모드</th><th>하는 말</th><th>상대가 느끼는 것</th><th>결과</th></tr>
+    <tr><td><b>전도사</b></td><td>"이게 옳습니다"</td><td>훈계받는다</td><td style="color:var(--bad)">반발심</td></tr>
+    <tr><td><b>검사</b></td><td>"그 근거는 틀렸어요"</td><td>공격받는다</td><td style="color:var(--bad)">방어, 재반박 강화</td></tr>
+    <tr><td><b>정치인</b></td><td>"제 편이 되시면…"</td><td>조종당한다</td><td style="color:var(--bad)">겉으로만 동의</td></tr>
+    <tr style="background:var(--ok-bg)"><td><b>안내자</b><br><span class="note">동기강화 면담</span></td><td>"어떻게 생각하세요?"<br>"제 정보를 말씀드려도 될까요?"</td><td>존중받는다, 결정은 내 것</td><td style="color:var(--ok)">스스로 변화 발언</td></tr>
+  </table>
+</div>
+
+<figure class="card scroll">
+<svg class="wide" viewBox="0 0 720 170" role="img" aria-label="안내자의 위치: 앞에서 끌기, 뒤에서 따라가기, 옆에서 함께 걷기 중 옆이 동기강화 면담의 자리">
+  <defs><marker id="ah5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
+  <text x="120" y="24" text-anchor="middle" class="bad b">앞에서 끌기</text>
+  <circle cx="160" cy="70" r="14" fill="var(--bad)"/><circle cx="80" cy="70" r="14" fill="var(--muted)"/>
+  <line x1="96" y1="70" x2="142" y2="70" stroke="var(--muted)" stroke-width="2" marker-end="url(#ah5)"/>
+  <text x="160" y="104" text-anchor="middle" class="muted">나</text><text x="80" y="104" text-anchor="middle" class="muted">상대</text>
+  <text x="120" y="140" text-anchor="middle" class="muted">"이래라저래라"</text>
+  <text x="360" y="24" text-anchor="middle" class="wait b">뒤에서 따라가기</text>
+  <circle cx="320" cy="70" r="14" fill="var(--wait)"/><circle cx="400" cy="70" r="14" fill="var(--muted)"/>
+  <line x1="336" y1="70" x2="382" y2="70" stroke="var(--muted)" stroke-width="2" marker-end="url(#ah5)"/>
+  <text x="320" y="104" text-anchor="middle" class="muted">나</text><text x="400" y="104" text-anchor="middle" class="muted">상대</text>
+  <text x="360" y="140" text-anchor="middle" class="muted">방향 없이 졸졸</text>
+  <text x="600" y="24" text-anchor="middle" class="ok b">옆에서 안내하기</text>
+  <circle cx="600" cy="56" r="14" fill="var(--muted)"/><circle cx="600" cy="92" r="14" fill="var(--ok)"/>
+  <line x1="620" y1="74" x2="680" y2="74" stroke="var(--ok)" stroke-width="2" marker-end="url(#ah5)"/>
+  <text x="575" y="60" text-anchor="end" class="muted">상대</text><text x="575" y="96" text-anchor="end" class="muted">나</text>
+  <text x="600" y="140" text-anchor="middle" class="muted">목표는 상대가 정함</text>
+</svg>
+<figcaption>밀러와 롤닉은 이 역할을 외국 여행 가이드에 비유했다. 가이드가 이래라저래라 하길 원하지 않지만 뒤만 졸졸 따라오길 원하지도 않는다. 상대가 목표를 이룰 때까지 안내자의 임무는 끝나지 않는다.</figcaption>
+</figure>
+
+<h2 id="ch7-5"><span class="n">5</span>교정반사를 참는다는 것</h2>
+<p class="lead">사람은 누구나 문제를 바로잡고 해답을 주고 싶어 한다(교정반사). 뼈가 부러지면 해법을 원하지만, 생각의 문제에는 공감을 원한다.</p>
+<div class="card">
+  <div class="two">
+    <div class="panel bad"><p class="label">교정반사</p>
+      <div class="flow" style="flex-direction:column;align-items:stretch;gap:6px">
+        <div class="box">상대가 고민을 꺼냄</div>
+        <div class="box bad">곧장 해법 제시<small>"그럼 이렇게 해 봐요"</small></div>
+      </div>
+      <p class="verdict bad">통제받는 압박감 → 도움말 거부</p>
+    </div>
+    <div class="panel ok"><p class="label">경청</p>
+      <div class="flow" style="flex-direction:column;align-items:stretch;gap:6px">
+        <div class="box">상대가 고민을 꺼냄</div>
+        <div class="box acc">묻고, 되비추고, 허락 구하기<small>"선택안 몇 개가 있는데 볼래요?"</small></div>
+      </div>
+      <p class="verdict ok">자율성 유지 → 스스로 선택</p>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <p><b>우리는 생각보다 듣지 않는다</b></p>
+  <div class="bars" style="margin-top:10px">
+    <div class="bar"><span>최악의 경청자로 평가된 경영자 중 "나는 훌륭한 경청자"</span><div class="track"><div class="fill bad" style="width:94%">94%</div></div></div>
+    <div class="bar"><span>여성 응답자 중 "반려동물이 배우자보다 잘 들어준다"</span><div class="track"><div class="fill wait" style="width:33%">3분의 1</div></div></div>
+  </div>
+  <p class="note" style="margin-top:12px">환자가 증상을 설명하는 데는 길어야 29초인데 대부분의 의사가 그 전에 말을 끊는다. 우간다 국회의원 베티 비곰베는 반군 지도자 조지프 코니를 협상장으로 불러낸 비결을 "그저 듣는 것"이라고 했다. 훌륭한 경청자는 자기가 똑똑해 보이기보다 상대가 똑똑하다고 느끼게 한다(뒤집힌 카리스마).</p>
+</div>
+
+<h2><span class="n">6</span>개발 현장에 대입하면</h2>
+<p class="lead">지어낸 시나리오다. 실제 사례가 아니다.</p>
+
+<div class="card">
+  <h3>시나리오 D. 테스트 코드를 거부하는 팀원</h3>
+  <div class="two">
+    <div class="panel bad"><p class="label">전도사, 검사 모드</p>
+      <div class="dialog">
+        <div class="line"><span class="who">TL</span><span>테스트 안 짜서 장애 난 거예요. 다음 분기부터 PR에 테스트 필수입니다.</span></div>
+        <div class="line"><span class="who">팀원</span><span>일정은 그대로인데 테스트까지요?</span></div>
+      </div>
+      <p class="verdict bad">형식적인 테스트만 늘고 불만이 쌓인다</p>
+    </div>
+    <div class="panel ok"><p class="label">동기강화 면담</p>
+      <div class="dialog">
+        <div class="line"><span class="who">TL</span><span><span class="tech">①</span>지난주 장애 대응 어떠셨어요?</span></div>
+        <div class="line"><span class="who">팀원</span><span>원인 찾는 데만 2시간 걸렸어요.</span></div>
+        <div class="line"><span class="who">TL</span><span><span class="tech">②</span>고치는 것보다 원인 찾는 시간이 제일 힘드셨던 거네요.</span></div>
+        <div class="line"><span class="who">팀원</span><span>네. 어디서 깨졌는지 몰라서 로그를 다 뒤졌거든요.</span></div>
+        <div class="line"><span class="who">TL</span><span><span class="tech">③</span>그때 뭐가 있었으면 덜 헤맸을 것 같아요?</span></div>
+        <div class="line"><span class="who">팀원</span><span>결제 쪽만이라도 깨지면 바로 알려주는 게 있었으면… 그 정도는 제가 짜볼 수 있을 것 같고요.</span></div>
+        <div class="line"><span class="who">TL</span><span><span class="tech">④</span>정리하면, 원인 찾는 데 시간이 제일 아까웠고, 결제 쪽이 깨지면 바로 알 수 있는 장치를 직접 만들어 볼 수 있겠다는 거죠? 빠진 거 있어요? 언제쯤 해볼 수 있을까요?</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">TL은 "테스트를 짜라"고 한 번도 말하지 않았다. 다음 행동이 팀원의 말로 정해졌다.</p>
+</div>
+
+<div class="card">
+  <h3>시나리오 E. 레거시 스택을 지키려는 아키텍트</h3>
+  <p class="note">상황: 주니어들이 신기술 전환 근거로 슬라이드 40장을 만들었지만, 지난 회의에서 아키텍트가 한마디로 잘랐다. 자료를 다시 들이밀면 "설득하러 왔다"는 게 바로 보이고 방어가 시작된다. 그래서 자료 없이 찾아간다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">자료로 밀어붙이기</p>
+      <div class="dialog">
+        <div class="line"><span class="who">주니어</span><span>보안 패치 지원 끝났고, 채용도 어렵고, 성능도 3배 차이 나요. 슬라이드 보시죠.</span></div>
+        <div class="line"><span class="who">아키텍트</span><span>그 벤치마크 환경 우리랑 다르잖아. 전환 비용은 누가 감당해?</span></div>
+      </div>
+      <p class="verdict bad">자료를 쏟을수록 재반박 논리만 단단해진다</p>
+    </div>
+    <div class="panel ok"><p class="label">자료 없이 찾아가 묻기</p>
+    <div class="dialog">
+      <div class="line"><span class="who">주니어</span><span><span class="tech">진짜 궁금함</span>지난번 전환 논의 때 반대하신 이유를 제가 제대로 이해 못 한 것 같아요. 그때 뭐가 제일 걸리셨어요?</span></div>
+      <div class="line"><span class="who">아키텍트</span><span>너희는 새 거 써보고 싶은 거잖아. 전환은 장난이 아니야.</span></div>
+      <div class="line"><span class="who">주니어</span><span><span class="tech">반영</span>써보고 싶은 마음이 있는 건 맞아요. 저희가 전환 비용을 가볍게 보는 걸로 보이셨겠네요.</span></div>
+      <div class="line"><span class="who">아키텍트</span><span>예전에 한 번 했다가 6개월 날렸어. 장애도 났고, 수습은 내가 했고.</span></div>
+      <div class="line"><span class="who">주니어</span><span><span class="tech">반영</span>직접 수습하셨으면, 그런 일이 다시 안 생기게 하는 게 제일 중요하시겠어요.</span></div>
+      <div class="line"><span class="who">아키텍트</span><span>그렇지. 그걸 아무도 몰라.</span></div>
+      <div class="line"><span class="who">주니어</span><span><span class="tech">반대쪽도 묻기</span>반대로 지금 스택을 몇 년 더 가져가면, 그때 걱정되는 건 없으세요?</span></div>
+      <div class="line"><span class="who">아키텍트</span><span>…보안 패치 끝나는 건 좀 걸리지. 이 스택 아는 사람 뽑기도 힘들고.</span></div>
+      <div class="line"><span class="who">주니어</span><span><span class="tech">조건은 상대가</span>만약 전환을 검토한다면, 어떤 조건이어야 해볼 만하다고 보세요?</span></div>
+      <div class="line"><span class="who">아키텍트</span><span>언제든 되돌릴 수 있어야 하고, 한 번에 다 바꾸면 안 되고, 운영 부담이 늘면 안 돼.</span></div>
+      <div class="line"><span class="who">주니어</span><span><span class="tech">요약, 허락</span>되돌릴 수 있고, 작게 나누고, 운영 부담이 없어야 한다는 거죠. 그 조건에 맞는 사례를 찾아봤는데, 다음에 30분만 보여드려도 될까요?</span></div>
+      <div class="line"><span class="who">아키텍트</span><span>보는 건 볼게. 기대는 하지 마.</span></div>
+    </div>
+    </div>
+  </div>
+  <p class="why">이 대화의 목표는 "전환하자"가 아니라 "절대 안 돼"를 "이 조건이면 볼게"로 옮기는 것이다. 판단 기준을 아키텍트가 직접 말했기 때문에, 다음에 가져갈 자료는 그의 기준에 답하는 자료가 된다. 대릴 데이비스처럼 한 번에 끝나는 대화가 아니라 여러 번 만나는 과정의 첫 대화다.</p>
+</div>
+
+<div class="card">
+  <h3>시나리오 F. 결정을 두 달째 미루는 PO</h3>
+  <p class="note">상황: PO가 "데이터가 더 쌓이면 결정하자"며 우선순위를 두 달째 정하지 않는다. 개발팀은 대기 중이다. "빨리 정해 주세요"는 이미 여러 번 했다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">재촉하기</p>
+      <div class="dialog">
+        <div class="line"><span class="who">개발 리드</span><span>팀이 두 달째 대기 중이에요. 이번 주 안에 꼭 정해 주세요.</span></div>
+        <div class="line"><span class="who">PO</span><span>데이터 없이 정했다가 틀리면 누가 책임져요? 조금만 더 봅시다.</span></div>
+      </div>
+      <p class="verdict bad">재촉할수록 PO는 더 많은 데이터를 요구한다</p>
+    </div>
+    <div class="panel ok"><p class="label">두려움 먼저 듣기</p>
+    <div class="dialog">
+      <div class="line"><span class="who">개발 리드</span><span><span class="tech">개방형 질문</span>데이터가 더 쌓이면 결정하자고 하셨는데, 어떤 게 보이면 결정하실 수 있을 것 같아요?</span></div>
+      <div class="line"><span class="who">PO</span><span>리텐션 추이가 좀 더 보여야죠. 지금 정했다가 틀리면 분기 전체가 날아가요.</span></div>
+      <div class="line"><span class="who">개발 리드</span><span><span class="tech">반영</span>틀렸을 때 분기 전체를 책임지는 게 부담이시군요.</span></div>
+      <div class="line"><span class="who">PO</span><span>솔직히 그렇죠. 지난번에 밀어붙인 기능이 반응이 없어서 리뷰 때 많이 깨졌거든요.</span></div>
+      <div class="line"><span class="who">개발 리드</span><span><span class="tech">반영</span>그 일을 겪으셨으면 더 신중해지실 수밖에 없겠어요.</span></div>
+      <div class="line"><span class="who">개발 리드</span><span><span class="tech">기다림의 비용</span>지금처럼 기다리는 동안에는 어떤 일이 생기고 있다고 보세요?</span></div>
+      <div class="line"><span class="who">PO</span><span>…개발팀이 대기하고 있는 거 알아요. 그것도 사실 신경 쓰여요.</span></div>
+      <div class="line"><span class="who">개발 리드</span><span><span class="tech">소망 확인</span>틀릴 위험은 줄이면서 팀은 움직이게 하는 방법이 있다면, 어떤 모양일까요?</span></div>
+      <div class="line"><span class="who">PO</span><span>한 번에 크게 걸지 말고… 작게 실험하면 틀려도 덜 아프겠죠. 2주짜리로.</span></div>
+      <div class="line"><span class="who">개발 리드</span><span><span class="tech">요약</span>정리하면, 틀렸을 때 크게 깨지는 게 걱정이고, 2주짜리 작은 실험이면 감당할 수 있다는 거죠? 빠진 거 있으세요? 첫 실험은 뭘로 하고, 팀과 윗분들께는 어떻게 설명하실 거예요?</span></div>
+      <div class="line"><span class="who">PO</span><span>리텐션 가설 하나로요. 실패해도 배우는 실험이라고 금요일 리뷰 때 제가 먼저 말할게요.</span></div>
+    </div>
+    </div>
+  </div>
+  <p class="why">미루는 진짜 이유(틀렸을 때 책임질 두려움)를 먼저 들었다. 기다리는 비용도 리드가 지적하지 않고 PO 입으로 말하게 했다. 마지막 요약에서 실험 내용뿐 아니라 팀과 윗선에 어떻게 전할지까지 물었다. 저자가 CEO 제프와의 대화에서 빠뜨려 실패한 단계다.</p>
+</div>
+
+<div class="card">
+  <h3>시나리오 G. 1:1에서 "성장하는 느낌이 없어요"</h3>
+  <div class="two">
+    <div class="panel bad"><p class="label">교정반사</p>
+      <div class="dialog">
+        <div class="line"><span class="who">매니저</span><span>그럼 신규 프로젝트 리드 맡아볼래요?</span></div>
+        <div class="line"><span class="who">팀원</span><span>아… 생각해볼게요.</span></div>
+      </div>
+      <p class="verdict bad">진짜 이유는 듣지 못했다</p>
+    </div>
+    <div class="panel ok"><p class="label">경청</p>
+      <div class="dialog">
+        <div class="line"><span class="who">매니저</span><span>어떤 순간에 그런 느낌이 드세요?</span></div>
+        <div class="line"><span class="who">팀원</span><span>설계 결정에 참여를 못 해서요.</span></div>
+        <div class="line"><span class="who">매니저</span><span>결정에서 빠져 있다고 느끼시는군요. 도움이 됐던 방법 몇 가지가 있는데 같이 볼래요?</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">해법을 먼저 던지지 않았고, 선택안은 고를 수 있는 형태로 제시해서 자율성을 지켰다.</p>
+</div>
+</section>
+
+<!-- ======================= 종합 ======================= -->
+<section class="chapter" id="both">
+<p class="kicker">6장 + 7장</p>
+<h1>두 장을 한 장으로</h1>
+<div class="card scroll">
+  <table class="txt">
+    <tr><th></th><th>6장 편견</th><th>7장 설득</th></tr>
+    <tr><td><b>안 통하는 것</b></td><td>"경기는 경기일 뿐", 좋은 개인 한 명 소개</td><td>설교, 반박, 데이터 폭격, 공포 조성</td></tr>
+    <tr><td><b>왜 안 통하나</b></td><td>정체성이 위협받으면 방어하고, 좋은 개인은 예외로 뺀다</td><td>통제받는 느낌이 심리적 면역체계를 키운다</td></tr>
+    <tr><td><b>통하는 것</b></td><td>"저쪽에서 태어났다면?" 미움의 우연성 되짚기, 직접 만나 질문하기</td><td>개방형 질문, 반영적 경청, 변화 발언 붙잡기, 요약</td></tr>
+    <tr><td><b>공통 원리</b></td><td colspan="2">결론을 주지 말고 상대가 스스로 다시 생각하게 한다. 대릴도 아르노도 "개종시킨 적 없다, 생각할거리를 줬을 뿐"이다.</td></tr>
+  </table>
+</div>
+<div class="card">
+  <p><b>내일 써먹을 체크리스트</b></p>
+  <ol class="check">
+    <li>"저 팀은 원래 ~해"라고 말하기 전에, 내가 그 팀이었다면 어땠을지 한 번 묻는다.</li>
+    <li>같은 편끼리만 의견을 모으고 있다면, 섞인 자리에서 상대 방식의 장점 세 개부터 적는다.</li>
+    <li>좋은 동료를 "예외"로 분류하고 있지 않은지 본다.</li>
+    <li>누군가를 바꾸고 싶을 때 첫 문장을 질문으로 시작한다.</li>
+    <li>해법이 떠올라도 상대 말을 한 번 되비춘 뒤, 정보를 줘도 되는지 허락을 구한다.</li>
+    <li>대화 끝에는 요약하고, 다음 단계를 상대 입으로 정하게 한다.</li>
+    <li>이 기법을 조종 수단으로 쓰지 않는다. 결과만큼 방법도 자랑스러운지 따진다.</li>
+  </ol>
+</div>
+</section>
+</main>
+<script>
+document.getElementById('t').addEventListener('click', function () {
+  var r = document.documentElement;
+  var dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark';
+});
+</script>
+</body>
+</html>
