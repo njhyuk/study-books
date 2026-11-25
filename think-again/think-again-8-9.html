@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="흑백 말고 회색으로 말하면 대화가 풀리고, 답 말고 고쳐 쓰는 법을 가르치면 생각이 자란다. 싱크 어게인 8, 9장을 그림, 표, 개발자 시나리오로 풀었다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+<title>싱크 어게인 8, 9장 그림 해설</title>
+<style>
+/* 레이아웃: 860px 한 단, 장마다 요약 카드 → 그림 → 비교표 → 개발자 시나리오 */
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --ink: #1b2129; --muted: #67707c; --line: #e2e5ea;
+  --ok: #157f3b; --ok-bg: #e7f5ec; --bad: #b42318; --bad-bg: #fdeceb;
+  --wait: #976400; --wait-bg: #fff3d4; --accent: #2b56c9; --accent-bg: #e9efff;
+  --font-body: "Noto Sans KR", Pretendard, "Apple SD Gothic Neo", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14171b; --card: #1c2025; --ink: #e7e9ec; --muted: #9aa2ad; --line: #323840;
+    --ok: #5cc985; --ok-bg: #16301f; --bad: #ff7d70; --bad-bg: #391c1a;
+    --wait: #e8b94c; --wait-bg: #382d12; --accent: #8eaaff; --accent-bg: #1e2945;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14171b; --card: #1c2025; --ink: #e7e9ec; --muted: #9aa2ad; --line: #323840;
+  --ok: #5cc985; --ok-bg: #16301f; --bad: #ff7d70; --bad-bg: #391c1a;
+  --wait: #e8b94c; --wait-bg: #382d12; --accent: #8eaaff; --accent-bg: #1e2945;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); line-height: 1.75; font-size: 16px; }
+main { max-width: 860px; margin: 0 auto; padding: 40px 16px 80px; }
+h1 { font-size: 30px; margin: 0 0 6px; letter-spacing: -0.02em; text-wrap: balance; }
+.sub { color: var(--muted); margin: 0 0 20px; }
+nav.toc { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+nav.toc a { border: 1px solid var(--line); background: var(--card); color: var(--ink); text-decoration: none; border-radius: 999px; padding: 6px 14px; font-size: 14px; }
+nav.toc a:hover, nav.toc a:focus-visible { border-color: var(--accent); color: var(--accent); }
+.chapter { margin-top: 56px; padding-top: 8px; border-top: 3px solid var(--ink); }
+.chapter .kicker { color: var(--accent); font-weight: 700; font-size: 14px; letter-spacing: .02em; margin-top: 14px; }
+.chapter h1 { margin-top: 2px; }
+h2 { font-size: 21px; margin: 44px 0 6px; letter-spacing: -0.01em; text-wrap: balance; }
+h2 .n { color: var(--muted); font-weight: 500; margin-right: 8px; font-variant-numeric: tabular-nums; }
+h3 { font-size: 16px; margin: 0 0 8px; }
+p { margin: 8px 0; }
+.lead { color: var(--muted); margin: 0 0 12px; max-width: 65ch; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; margin: 14px 0; }
+.scroll { overflow-x: auto; }
+.tldr { border-left: 4px solid var(--accent); }
+.tldr b { color: var(--accent); margin-right: 6px; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+figure { margin: 0; }
+figcaption { color: var(--muted); font-size: 13.5px; margin-top: 10px; }
+svg { display: block; width: 100%; height: auto; }
+svg.wide { min-width: 620px; }
+svg text { fill: var(--ink); font-size: 13px; font-family: var(--font-body); }
+svg .muted { fill: var(--muted); } svg .ok { fill: var(--ok); } svg .bad { fill: var(--bad); } svg .wait { fill: var(--wait); } svg .acc { fill: var(--accent); }
+svg .b { font-weight: 700; }
+
+.flow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.box { border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 14px; background: var(--card); font-size: 14px; min-width: 110px; text-align: center; }
+.box small { display: block; color: var(--muted); font-size: 12px; }
+.box.ok { border-color: var(--ok); background: var(--ok-bg); }
+.box.bad { border-color: var(--bad); background: var(--bad-bg); }
+.box.wait { border-color: var(--wait); background: var(--wait-bg); }
+.box.acc { border-color: var(--accent); background: var(--accent-bg); }
+.arrow { color: var(--muted); font-size: 20px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 680px) { .two { grid-template-columns: 1fr; } }
+.panel { border: 1.5px solid var(--line); border-radius: 12px; padding: 16px; }
+.panel.bad { border-color: var(--bad); }
+.panel.ok { border-color: var(--ok); }
+.panel .label { font-size: 12.5px; font-weight: 700; }
+.panel.bad .label { color: var(--bad); } .panel.ok .label { color: var(--ok); }
+.verdict { margin-top: 10px; font-weight: 600; font-size: 14.5px; }
+.verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); }
+
+/* 막대 비교 */
+.bars { display: flex; flex-direction: column; gap: 12px; }
+.bar { display: grid; grid-template-columns: 170px 1fr; gap: 12px; align-items: center; font-size: 14px; }
+@media (max-width: 520px) { .bar { grid-template-columns: 1fr; gap: 4px; } }
+.track { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; height: 30px; position: relative; overflow: hidden; }
+.fill { height: 100%; border-radius: 7px 0 0 7px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-weight: 700; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.fill.ok { background: var(--ok-bg); color: var(--ok); border-right: 3px solid var(--ok); }
+.fill.bad { background: var(--bad-bg); color: var(--bad); border-right: 3px solid var(--bad); }
+.fill.acc { background: var(--accent-bg); color: var(--accent); border-right: 3px solid var(--accent); }
+.fill.wait { background: var(--wait-bg); color: var(--wait); border-right: 3px solid var(--wait); }
+
+.paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; }
+.path { border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px 10px 50px; position: relative; font-size: 14.5px; }
+.path small { display: block; color: var(--muted); font-size: 13px; }
+.pid { position: absolute; left: 10px; top: 11px; background: var(--ink); color: var(--bg); border-radius: 6px; font-size: 12px; font-weight: 700; padding: 2px 6px; }
+
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { color: var(--muted); font-weight: 600; font-size: 12.5px; line-height: 1.4; }
+table.cmp th, table.cmp td { text-align: center; }
+table.cmp th:first-child, table.cmp td:first-child { text-align: left; }
+table.cmp td { font-size: 17px; }
+table.cmp td:first-child { font-size: 14px; font-weight: 600; }
+table.cmp td small { display: block; font-size: 11.5px; color: var(--muted); }
+table.cmp tr.best td { background: var(--ok-bg); }
+table.txt td { font-size: 14px; text-align: left; vertical-align: top; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; margin-bottom: 12px; }
+details { border-top: 1px solid var(--line); padding: 8px 0; }
+details summary { cursor: pointer; font-weight: 600; font-size: 14.5px; }
+details p { margin: 8px 0 4px; font-size: 14.5px; }
+
+.dialog { display: flex; flex-direction: column; gap: 6px; font-size: 14.5px; margin: 8px 0 0; }
+.dialog .line { display: grid; grid-template-columns: 72px 1fr; gap: 8px; }
+.dialog .who { color: var(--muted); font-size: 13px; font-weight: 700; padding-top: 1px; }
+.tech { display: inline-block; font-size: 12px; font-weight: 700; color: var(--accent); background: var(--accent-bg); border-radius: 999px; padding: 0 8px; margin-right: 4px; }
+.why { margin-top: 12px; padding: 10px 14px; background: var(--accent-bg); border-radius: 10px; font-size: 14.5px; }
+.note { color: var(--muted); font-size: 13.5px; }
+ol.check { padding-left: 22px; margin: 0; } ol.check li { margin: 6px 0; }
+.cast-title { font-weight: 700; margin: 0 0 10px; }
+.cast { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+.who-card { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; font-size: 14px; line-height: 1.5; }
+.who-card .role { font-size: 12px; color: var(--accent); font-weight: 600; }
+.who-card p { margin: 4px 0 0; font-size: 13.5px; }
+.who-card p.ex { color: var(--muted); }
+.who-card .where { margin-top: 4px; font-size: 12px; color: var(--muted); text-decoration: none; }
+.who-card .where::before { content: "→ "; }
+.who-card .where:hover { color: var(--accent); }
+.cover { background: #1d3fa6; color: #ffffff; }
+.cover-in { max-width: 1200px; margin: 0 auto; padding: 56px 24px 48px; display: grid; grid-template-columns: 1fr 300px; gap: 32px; align-items: center; }
+.cover-kicker { margin: 0; font-size: 22px; font-weight: 700; color: #ffd166; letter-spacing: .02em; }
+.cover-title { margin: 10px 0 22px; font-size: clamp(44px, 7.5vw, 92px); line-height: 1.08; letter-spacing: -0.03em; font-weight: 900; color: #ffffff; text-wrap: balance; }
+.cover-lines { list-style: none; margin: 0 0 26px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.cover-lines li { font-size: clamp(22px, 3.4vw, 40px); font-weight: 900; line-height: 1.3; }
+.cover-title { -webkit-text-stroke: 3px #ffffff; paint-order: stroke fill; }
+.cover-lines li { -webkit-text-stroke: .6px #ffffff; paint-order: stroke fill; }
+.cover-kicker { -webkit-text-stroke: .6px #ffd166; }
+.cover-lines span { -webkit-text-stroke: .5px #1b2129; display: inline-block; background: #ffd166; color: #1b2129; border-radius: 10px; padding: 0 12px; margin-right: 12px; font-size: .8em; vertical-align: 2px; }
+main > .toc { margin: 0 0 8px; }
+.cover .toc a { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.35); color: #ffffff; }
+.cover .toc a:hover, .cover .toc a:focus-visible { background: #ffffff; color: #1d3fa6; }
+.cover-art { width: 100%; height: auto; }
+svg.cover-art text.art-q { font-size: 60px; font-weight: 900; fill: #1d3fa6; stroke: #1d3fa6; stroke-width: 3px; }
+svg.cover-art text.art-a { font-size: 42px; font-weight: 900; fill: #1b2129; stroke: #1b2129; stroke-width: 2px; }
+@media (min-width: 900px) { .cover-in { min-height: 630px; padding-top: 40px; padding-bottom: 40px; grid-template-columns: 1fr 360px; } }
+@media (max-width: 760px) { .cover-in { grid-template-columns: 1fr; } .cover-art { display: none; } }
+.chipset { display: flex; flex-direction: column; gap: 8px; margin: 4px 0 14px; }
+.chip-row { display: flex; flex-direction: column; gap: 4px; }
+.chip-group { font-size: 12px; font-weight: 700; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-family: var(--font-body); font-size: 13px; border: 1.5px solid var(--ok); background: var(--card); color: var(--ok); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ok); color: var(--card); font-weight: 700; }
+.panel .label .note { font-weight: 400; margin-left: 6px; }
+.key { margin: 12px 0 0; padding: 10px 12px; background: var(--ok-bg); border-radius: 10px; font-size: 14px; }
+.key p { margin: 4px 0 0; }
+.key .axis { display: inline-block; font-size: 11.5px; font-weight: 700; color: var(--ok); border: 1px solid var(--ok); border-radius: 6px; padding: 0 6px; margin-right: 6px; }
+.key .anchor { display: inline-block; margin: 6px 0 0; margin-left: 0; }
+.key b { color: var(--ok); margin-right: 6px; }
+h3 .anchor { font-size: 14px; font-weight: 400; color: var(--muted); text-decoration: none; margin-left: 4px; }
+h3 .anchor:hover, h3 .anchor:focus-visible { color: var(--accent); }
+.key .anchor { font-size: 12.5px; color: var(--muted); margin-left: 6px; white-space: nowrap; }
+h3[id] { scroll-margin-top: 16px; }
+.toggle { position: absolute; top: 14px; right: 14px; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px; padding: 6px 12px; font-size: 13px; cursor: pointer; font-family: var(--font-body); }
+.nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.num { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.num b { display: block; font-size: 24px; line-height: 1.2; color: var(--accent); font-variant-numeric: tabular-nums; }
+.num span { font-size: 13px; color: var(--muted); }
+.three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .three { grid-template-columns: 1fr; } }
+.terms { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+.term { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.55; }
+.term p { margin: 4px 0 0; font-size: 13.5px; }
+.term p.ex { color: var(--muted); }
+.headlines { list-style: none; padding: 0; margin: 0; font-size: 14px; display: flex; flex-direction: column; gap: 6px; }
+.headlines li { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px dashed var(--line); padding-bottom: 4px; flex-wrap: wrap; }
+.headlines li span { color: var(--muted); font-size: 12.5px; }
+ol.steps { padding-left: 22px; margin: 10px 0 0; font-size: 14px; columns: 2; column-gap: 28px; }
+@media (max-width: 640px) { ol.steps { columns: 1; } }
+ol.steps li { margin: 3px 0; break-inside: avoid; }
+.col { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+.col .arrow { text-align: center; line-height: 1; font-size: 16px; }
+svg.cover-art text.art-s { font-size: 30px; font-weight: 900; fill: #1b2129; stroke: #1b2129; stroke-width: 1px; }
+svg.cover-art text.art-w { font-size: 26px; font-weight: 900; fill: #ffffff; stroke: #ffffff; stroke-width: 1px; }
+.sec-id { scroll-margin-top: 16px; }
+.conclusion { margin: 16px 0 0; border: 1.5px solid var(--accent); border-radius: 12px; background: var(--accent-bg); padding: 12px 16px 10px; }
+.conclusion .c-title { margin: 0 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--accent); font-size: 16px; font-weight: 800; color: var(--accent); }
+.conclusion ul { margin: 0; padding-left: 20px; }
+.conclusion li { margin: 5px 0; font-size: 14.5px; line-height: 1.6; }
+.conclusion li b { color: var(--ink); }
+</style>
+</head>
+<body>
+<button class="toggle" id="t" type="button">다크/라이트 전환</button>
+<header class="cover">
+  <div class="cover-in">
+    <div class="cover-text">
+      <p class="cover-kicker">싱크 어게인 · 그림 해설</p>
+      <h1 class="cover-title">8장, 9장<br>한 장으로 보기</h1>
+      <ul class="cover-lines">
+        <li><span>8장</span>흑백 말고 회색으로 말하라</li>
+        <li><span>9장</span>답 말고 고쳐 쓰는 법을 가르쳐라</li>
+      </ul>
+    </div>
+    <svg class="cover-art" viewBox="0 0 360 360" role="img" aria-label="흑에서 백으로 이어지는 회색 띠 아래에 여러 번 고쳐 쓴 초안 종이가 겹쳐 있다">
+      <rect x="20" y="28" width="64" height="56" fill="#0b1633"/>
+      <rect x="84" y="28" width="64" height="56" fill="#3d4d78"/>
+      <rect x="148" y="28" width="64" height="56" fill="#7b88ad"/>
+      <rect x="212" y="28" width="64" height="56" fill="#bcc4da"/>
+      <rect x="276" y="28" width="64" height="56" fill="#ffffff"/>
+      <text x="180" y="124" text-anchor="middle" class="art-w">흑과 백 사이</text>
+      <rect x="62" y="160" width="170" height="180" rx="10" fill="#ffffff" opacity=".35" transform="rotate(-10 147 250)"/>
+      <rect x="90" y="156" width="170" height="180" rx="10" fill="#ffffff" opacity=".6" transform="rotate(-4 175 246)"/>
+      <rect x="128" y="152" width="170" height="184" rx="10" fill="#ffd166"/>
+      <rect x="150" y="214" width="120" height="8" rx="4" fill="#1b2129" opacity=".35"/>
+      <rect x="150" y="234" width="96" height="8" rx="4" fill="#1b2129" opacity=".35"/>
+      <rect x="150" y="254" width="110" height="8" rx="4" fill="#1b2129" opacity=".35"/>
+      <rect x="150" y="274" width="70" height="8" rx="4" fill="#1b2129" opacity=".35"/>
+      <text x="213" y="196" text-anchor="middle" class="art-s">초안 4</text>
+    </svg>
+  </div>
+</header>
+<main>
+<nav class="toc" aria-label="장 이동">
+  <a href="#ch8">8장 격앙된 대화</a>
+  <a href="#ch9">9장 교과서 다시 쓰기</a>
+  <a href="#both">두 장을 한 장으로</a>
+</nav>
+
+<!-- ======================= 8장 ======================= -->
+<section class="chapter" id="ch8">
+<p class="kicker">8장 · 평행선을 달리는 토론을 하나로 녹이다</p>
+<h1>격앙된 대화</h1>
+
+<div class="card tldr">
+  <p><b>한 줄 요약</b>뜨거운 쟁점은 두 편으로 나눌수록 굳고, 여러 갈래로 쪼개 보여줄수록 풀린다.</p>
+  <p><b>안 통하는 것</b>양쪽 입장 나란히 보여주기, "진실 대 부정론자" 구도, 상대 입장 머릿속으로 상상하기.</p>
+  <p><b>통하는 것</b>경고성 일러두기, 만약의 경우, 여러 층위의 해결책, 묻기(관점 탐색), 섞인 감정 그대로 말하기. 비교는 <a href="#cmp8">6번</a>.</p>
+</div>
+
+<div class="card">
+  <p class="cast-title">등장인물</p>
+  <div class="cast">
+    <div class="who-card"><b>피터 콜먼</b><span class="role">심리학자</span><p>컬럼비아대 '어려운 대화 연구소' 운영</p><a href="#ch8-2" class="where">1번, 7번</a></div>
+    <div class="who-card"><b>총기 규제 기사 실험</b><span class="role">핵심 실험</span><p>같은 정보, 다른 구성의 기사 두 버전</p><a href="#ch8-2" class="where">1번</a></div>
+    <div class="who-card"><b>아만다 리플리</b><span class="role">기자</span><p>복잡한 기사는 "인류학자의 현장 메모"</p><a href="#ch8-2" class="where">1번</a></div>
+    <div class="who-card"><b>로버트 벤츨리</b><span class="role">유머 작가</span><p>"세상을 두 종류로 나누는 사람과 아닌 사람"</p><a href="#ch8-3" class="where">2번</a></div>
+    <div class="who-card"><b>월트 휘트먼</b><span class="role">영국 시인</span><p>여러 의견을 들어야 내 안의 여러 생각을 안다</p><a href="#ch8-3" class="where">2번</a></div>
+    <div class="who-card"><b>앨 고어</b><span class="role">전 부통령</span><p>&lt;불편한 진실&gt;, 열정적 설교로도 못 바꾼 믿음</p><a href="#ch8-4" class="where">3번</a></div>
+    <div class="who-card"><b>여섯 개의 미국</b><span class="role">기후 여론조사</span><p>기후변화를 보는 여섯 가지 관점</p><a href="#ch8-4" class="where">3번</a></div>
+    <div class="who-card"><b>회의주의탐구위원회</b><span class="role">과학 단체</span><p>회의주의와 부정을 구분</p><a href="#ch8-4" class="where">3번</a></div>
+    <div class="who-card"><b>커피 기사 제목</b><span class="role">같은 논문, 반대 제목</span><p>"뇌에 좋다" 대 "뇌에 해롭다"</p><a href="#ch8-5" class="where">4번</a></div>
+    <div class="who-card"><b>대니얼 골먼</b><span class="role">심리학 박사</span><p>정서지능이 리더 성공의 "거의 90%"</p><a href="#ch8-6" class="where">5번</a></div>
+    <div class="who-card"><b>조던 피터슨</b><span class="role">심리학 박사</span><p>"EQ 따위는 없다"</p><a href="#ch8-6" class="where">5번</a></div>
+    <div class="who-card"><b>존 롤스</b><span class="role">도덕 철학자</span><p>무지의 장막: 결론 모른 채 방법으로 판단</p><a href="#ch8-6" class="where">5번</a></div>
+    <div class="who-card"><b>쿠머스페크</b><span class="role">독일어 감정 단어</span><p>'슬픔의 베이컨', 슬퍼서 먹다 찐 살</p><a href="#ch8-8" class="where">7번</a></div>
+    <div class="who-card"><b>크리스천 쿠퍼</b><span class="role">센트럴파크 사건 당사자</span><p>사과에 대해 판단을 유보한 흑인 남성</p><a href="#dialog-cooper" class="where">9번</a></div>
+    <div class="who-card"><b>이브람 켄디</b><span class="role">역사가</span><p>인종차별주의자는 고정된 정체성이 아니다</p><a href="#dialog-cooper" class="where">9번</a></div>
+  </div>
+</div>
+
+<h2 id="ch8-2"><span class="n">1</span>같은 정보, 다른 기사: 합의한 팀의 비율</h2>
+<p class="lead"><b>왜 나오나</b> 이 장의 핵심 주장(쟁점을 복잡하게 보여주면 대화가 풀린다)을 증명하는 실험이다. 기사 속 정보는 같고, 짜는 방식만 다르다.</p>
+<p class="lead">어려운 대화 연구소에서 낙태에 대해 의견이 정반대인 낯선 두 사람이 20분 안에 공동성명서를 쓴다. 그 전에 총기 규제 기사 하나를 읽게 했다.</p>
+<div class="card">
+  <div class="bars">
+    <div class="bar"><span>양측 입장을 균형 있게 다룬 기사</span><div class="track"><div class="fill bad" style="width:44%">44%</div></div></div>
+    <div class="bar"><span>여러 관점이 얽힌 복잡한 문제로 다룬 기사</span><div class="track"><div class="fill ok" style="width:100%">100%</div></div></div>
+  </div>
+  <div class="two" style="margin-top:14px">
+    <div class="panel bad"><p class="label">이분법 기사를 읽은 대화</p><p>상대 주장에 관심을 두기보다 자기 주장을 방어했다.</p></div>
+    <div class="panel ok"><p class="label">복잡한 기사를 읽은 대화</p><p>공통점을 말하는 비율이 자기 주장을 말하는 비율의 두 배였고 질문이 많았다. 성명서 수준과 만족감도 더 높았다.</p></div>
+  </div>
+  <p class="note" style="margin-top:12px">복잡한 기사를 읽은 사람들은 차별 철폐 조치, 사형제처럼 다른 쟁점도 다시 생각했다. 총기 문제도 공격 무기 금지는 양당 지지율이 47~50%포인트 차이 나지만, 범죄경력 조회(공화당 83%, 민주당 96%)와 정신건강 검사(81%, 94%)는 양쪽 다 지지한다.</p>
+</div>
+
+<div class="conclusion"><p class="c-title">책의 결론</p><ul><li>반대편 의견을 보여주는 것만으로는 부족하다.</li><li>두 극단을 나란히 놓는 건 해결책이 아니라 양극화의 일부다.</li><li>해독제는 여러 관점을 모두 보여주는 <b>복잡성</b>이다.</li><li>정치 논쟁에 만병통치약은 없지만, <b>단순화하려는 충동에 저항하기</b>가 첫걸음이다.</li></ul></div>
+
+<h2 id="ch8-3"><span class="n">2</span>이분법이 대화를 막는 길 4개</h2>
+<p class="lead">이 ID가 아래 비교표의 마지막 열이 된다.</p>
+<div class="card"><div class="paths">
+  <div class="path"><span class="pid">B1</span><b>두 극단 나란히 보여주기</b><small>반대편 의견을 보는 것만으로는 안 바뀐다. 오히려 자기 의견이 강화된다. 인터넷이 양극화를 못 막은 이유.</small></div>
+  <div class="path"><span class="pid">B2</span><b>"우리 대 저들" 구도</b><small>"진실 대 부정론자"처럼 흑과 백 중 하나를 고르라고 하면, 경계에 있던 사람은 묵살하는 쪽으로 간다.</small></div>
+  <div class="path"><span class="pid">B3</span><b>해결책 혐오</b><small>해결책이 마음에 안 들면 문제 자체를 부정한다.</small></div>
+  <div class="path"><span class="pid">B4</span><b>감정의 이분법</b><small>비생산적 대화에서는 감정이 한두 개로 좁아진다. "나는 인종차별주의자가 아니다" 같은 단순한 설명이 나온다.</small></div>
+</div>
+<p class="note" style="margin-top:12px">이분법 편향은 복잡한 연속체를 두 범주로 단순화해서 선명함을 얻으려는 성향이다. 시인 월트 휘트먼의 말을 빌리면, 내가 여러 개의 생각을 가지고 있음을 깨달으려면 여러 개의 의견이 필요하다.</p>
+</div>
+<figure class="card">
+  <svg viewBox="0 0 620 120" role="img" aria-label="책에 실린 만화: 해답으로 가는 길 표지판에서 사람들은 단순하지만 틀린 길로 줄을 서고, 복잡하지만 옳은 길은 비어 있다">
+    <defs><marker id="ah8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
+    <rect x="250" y="14" width="120" height="30" rx="6" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>
+    <text x="310" y="34" text-anchor="middle" class="b">해답으로 가는 길</text>
+    <line x1="250" y1="80" x2="60" y2="80" stroke="var(--bad)" stroke-width="2" marker-end="url(#ah8)"/>
+    <line x1="370" y1="80" x2="560" y2="80" stroke="var(--ok)" stroke-width="2" marker-end="url(#ah8)"/>
+    <text x="155" y="70" text-anchor="middle" class="bad b">단순하지만 틀린 길</text>
+    <text x="155" y="104" text-anchor="middle" class="muted">긴 줄</text>
+    <text x="465" y="70" text-anchor="middle" class="ok b">복잡하지만 옳은 길</text>
+    <text x="465" y="104" text-anchor="middle" class="muted">텅 빔</text>
+  </svg>
+  <figcaption>책에 실린 만화(Non Sequitur)를 옮겼다. 사람들은 선명한 쪽으로 줄을 선다.</figcaption>
+</figure>
+
+<h2 id="ch8-4"><span class="n">3</span>기후변화를 보는 미국은 두 개가 아니라 여섯 개</h2>
+<p class="lead"><b>왜 나오나</b> 정확한 데이터와 열정을 다 갖춘 앨 고어도 사람들의 믿음을 못 바꿨다. 무엇이 문제였는지 보려고 꺼낸 사례다.</p>
+<p class="lead">앨 고어의 &lt;불편한 진실&gt; 뒤에도 2018년 미국인 59%만 기후변화를 중대한 위협으로 봤다(16%는 위협이 아니라고 봤다). 고어는 열정적으로 설교했지만 "진실 대 기후변화 부정론자" 구도(B2)를 썼다. 실제 여론은 여섯 갈래다.</p>
+<div class="card">
+  <div class="bars">
+    <div class="bar"><span>화들짝 놀람</span><div class="track"><div class="fill ok" style="width:31%">31%</div></div></div>
+    <div class="bar"><span>걱정함</span><div class="track"><div class="fill ok" style="width:26%">26%</div></div></div>
+    <div class="bar"><span>조심스러움</span><div class="track"><div class="fill acc" style="width:16%">16%</div></div></div>
+    <div class="bar"><span>관심 없음</span><div class="track"><div class="fill wait" style="width:7%">7%</div></div></div>
+    <div class="bar"><span>의심함</span><div class="track"><div class="fill wait" style="width:10%">10%</div></div></div>
+    <div class="bar"><span>묵살함</span><div class="track"><div class="fill bad" style="width:10%">10%</div></div></div>
+  </div>
+  <p class="note" style="margin-top:12px">2019년 11월, 18세 이상 미국인 1,303명. 위로 갈수록 믿음과 걱정, 동기부여가 높다. 묵살하는 쪽은 10%뿐인데 미디어 조명은 가장 많이 받는다. 2000~2016년 기사에서 반대론자는 기후 과학자보다 49% 더 많이 다뤄졌고, 사람들은 부정론자 비율을 과대평가해 행동을 망설였다.</p>
+</div>
+<div class="card">
+  <div class="two">
+    <div class="panel ok"><p class="label">회의론자</p><p>보고 듣는 걸 다 믿지 않고, 비판적으로 질문하며 생각을 계속 업데이트한다. 건강한 과학자 태도.</p></div>
+    <div class="panel bad"><p class="label">부정론자</p><p>전도사, 검사, 정치인 모드에 갇혀 이미 정한 결론을 지키려고 사실을 무시하거나 왜곡한다.</p></div>
+  </div>
+  <p class="note" style="margin-top:10px">회의주의탐구위원회: 회의주의는 "과학적 방법론의 본질적인 특성", 부정은 "아무런 객관적 고려 없이 어떤 것을 연역적으로 거부하는 태도"다.</p>
+</div>
+
+<div class="conclusion"><p class="c-title">책의 결론</p><ul><li>문제는 열정이나 데이터가 아니라 <b>'우리 대 저들' 구도</b>였다.</li><li>편을 고르라고 하면 경계에 있던 사람은 묵살하는 쪽으로 간다.</li><li>출발점은 <b>스펙트럼 전체를 보여주기</b>다.</li><li>얼마나 많은 사람이 걱정하는지 보이면, 중간의 다수가 행동할 준비를 한다.</li></ul></div>
+
+<h2 id="ch8-5"><span class="n">4</span>정확, 단순, 잘 팔림: 셋 중 둘만 고를 수 있다</h2>
+<p class="lead"><b>왜 나오나</b> 복잡성을 다루는 법을 정보를 받는 쪽과 만드는 쪽 양쪽에서 보여주려는 예다. 커피 기사는 같은 데이터가 단순화되면서 정반대로 전해지는 모습이다.</p>
+<div class="card">
+  <div class="two">
+    <figure>
+      <svg viewBox="0 0 320 220" role="img" aria-label="정확하다, 단순하다, 잘 수용된다를 꼭짓점으로 한 삼각형. 두 개를 선택하라">
+        <polygon points="160,30 40,180 280,180" fill="none" stroke="var(--ink)" stroke-width="2"/>
+        <text x="160" y="20" text-anchor="middle" class="b">정확하다</text>
+        <text x="40" y="204" text-anchor="middle" class="b">단순하다</text>
+        <text x="280" y="204" text-anchor="middle" class="b">잘 수용된다</text>
+        <text x="160" y="150" text-anchor="middle" class="acc b">두 개를 선택하시오</text>
+      </svg>
+      <figcaption>책의 그림. 뜨거운 쟁점에서 셋을 다 가질 수는 없다.</figcaption>
+    </figure>
+    <div>
+      <p><b>같은 커피 논문, 반대 제목</b></p>
+      <ul class="headlines">
+        <li>커피가 뇌에 좋다는 보다 많은 정보가 있다<span>Forbes</span></li>
+        <li>커피는 사소한 인지 손상을 막아준다<span>Bustle</span></li>
+        <li>커피 음용량이 늘어나면 뇌에 해롭다<span>CBS Atlanta</span></li>
+        <li>한 잔 더 마시는 커피가 뇌에 해로운 이유<span>India Today</span></li>
+      </ul>
+      <p class="note">실제 결과: 하루 한두 잔 마시는 노인은 안 마시거나 많이 마시는 사람보다 인지 손상 위험이 낮았다. 그런데 마시던 양을 하루 한 잔 이상 늘리면 위험이 높아졌다.</p>
+      <ul class="headlines"><li><b>어제의 커피 과학, 뇌에 유익하다. 오늘은? 조금만 더 생각해보고…</b><span>Washington Post</span></li></ul>
+      <p class="note">열 단어 정도로 복잡성을 바로 전한 제목.</p>
+    </div>
+  </div>
+</div>
+
+<div class="conclusion"><p class="c-title">책의 결론</p><ul><li>받는 쪽: 복잡성을 신뢰의 신호로 보고 "양극단 사이에 빠진 관점"을 묻는다.</li><li>만드는 쪽: <b>불확실성을 인정해도 신뢰를 잃지 않고</b> 오히려 관심을 끈다.</li><li>미묘한 차이는 입소문은 덜 타도 더 큰 대화의 씨앗이 된다. 짧은 제목으로도 전할 수 있다.</li></ul></div>
+
+<h2 id="ch8-6"><span class="n">5</span>정서지능 논쟁: "있냐 없냐"가 아니라 "언제냐"</h2>
+<p class="lead"><b>왜 나오나</b> 바로 앞에서 저자는 "글쓴이들은 정확한 기록보다 서사의 일관성에 사로잡힌다"고 반성한다. 정서지능 논쟁은 그 함정의 사례이자, 저자가 이 장에서 말한 복잡성 지침(미묘한 차이, 경고성 일러두기, 만약의 경우)을 자기 글에 직접 적용해 본 시험이다.</p>
+<div class="card">
+  <div class="three">
+    <div class="panel bad"><p class="label">대니얼 골먼</p><p>정서지능이 IQ보다 중요하고 리더십 성공의 "거의 90%"를 결정한다.</p></div>
+    <div class="panel bad"><p class="label">조던 피터슨</p><p>"EQ 따위는 없다." 시류에 편승한 유행, 기업의 장삿속.</p></div>
+    <div class="panel ok"><p class="label">저자 (복잡성)</p><p><span class="tech">미묘한 차이</span>쓸모없다는 뜻은 아니다.<br><span class="tech">일러두기</span>더 나은 검사가 나오면 바뀔 수 있다.<br><span class="tech">만약의 경우</span>감정 정보가 풍부한 상황에서 유용한 기술이다.</p></div>
+  </div>
+  <div class="nums" style="margin-top:14px"><div class="num"><b>3~8%</b><span>EQ가 설명하는 업무 성과</span></div><div class="num"><b>2배 이상</b><span>IQ가 EQ보다 중요한 정도</span></div></div>
+  <p class="note">약 200개 직업군 메타분석. IQ와 성격을 같게 두면 EQ도 성과를 예측하지만, IQ가 두 배 이상 중요하다. 부동산 중개인, 고객서비스, 상담사에게는 도움이 되고 엔지니어나 회계사에게는 도움이 안 되거나 해로울 수 있다. "당신은 내 자동차를 고쳐주거나 소득신고를 대행해주기만 하면 됩니다."</p>
+  <div class="flow" style="margin-top:14px">
+    <div class="box bad">골먼, 피터슨<small>"의미가 있나 없나"를 다툼</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box acc">저자의 진단<small>둘 다 핵심을 놓쳤다</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box ok">물어야 할 것<small>"언제 중요한가"(만약의 경우)</small></div>
+  </div>
+  <p style="margin-top:12px"><b>링크드인 글에 대한 반응</b></p>
+  <div class="two">
+    <div class="panel ok"><p class="label">많은 사람</p><p>복잡한 메시지에 열정적으로 반응했다. "이거 아니면 저거는 없다", 철석같이 믿던 것도 돌다리 두드리듯 다시 보게 됐다는 반응이 나왔다. 저자는 놀랐고 기뻤다고 한다.</p></div>
+    <div class="panel bad"><p class="label">일부</p><p>확인된 증거는 보지도 않고 "정서지능은 성공의 필수 요건"이라며 적개심을 드러냈다. 저자는 이들을 <b>아이디어 숭배 집단</b>(디톡스 다이어트, 학습 유형, MBTI 신봉 등)이라 부른다.</p></div>
+  </div>
+  <div class="conclusion"><p class="c-title">책의 결론</p><ul><li>"◇◇◇는 항상 옳다"고 단정하는 순간 아이디어 숭배 집단이 된다.</li><li><b>어떤 행동도 언제나 효과적이지는 않고, 모든 처방은 의도하지 않은 결과를 낳는다.</b></li><li>그래서 무지의 장막처럼, 결론을 모르는 채 연구 방법만 보고 받아들일지 정한다.</li></ul></div>
+</div>
+
+<h2 id="cmp8"><span class="n">6</span>비교표: 무엇을 덧붙이면 대화가 풀리나</h2>
+<div class="card">
+  <p><b>표를 읽는 법</b> 메시지가 듣는 사람에게 세 단계로 닿는다고 보고, 각 방식이 어디까지 갔는지 본다. 커피 기사를 읽는 장면으로 예를 들면 이렇다.</p>
+  <div class="flow" style="margin-top:12px">
+    <div class="box">① 관심을 갖는다<small>제목을 보고<br>기사를 끝까지 읽는다</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box">② 말하는 사람을 믿는다<small>"이 기자는<br>믿을 만하네"</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box ok">③ 내 생각을 고친다<small>"커피에 대해 내가 알던 게<br>너무 단순했구나"</small></div>
+  </div>
+  <p class="note" style="margin-top:12px">이 장의 목표는 ③이다. 마지막 열은 2번의 B1~B4 중 그 방식이 끊어 낸 길이다.</p>
+</div>
+<div class="card scroll">
+  <div class="legend"><span>✅ 됐다</span><span>⚠️ 일부만</span><span>❌ 안 됐다</span><span>– 책에 근거 없음</span></div>
+  <table class="cmp">
+    <tr><th>방식</th><th>① 관심을 갖는다</th><th>② 말하는 사람을 믿는다</th><th>③ 내 생각을 고친다</th><th>끊어 낸 길</th></tr>
+    <tr><td>양측 입장 나란히 (이분법 기사)</td><td>⚠️<small>선명하지만</small></td><td>–</td><td>❌<small>합의 44%, 자기 주장 방어</small></td><td style="font-size:13px">없음<small>B1 그 자체</small></td></tr>
+    <tr><td>상대 입장 상상하기 (관점 수용)</td><td>–</td><td>–</td><td>❌<small>오히려 덜 수용, 25회 실패</small></td><td style="font-size:13px">없음</td></tr>
+    <tr class="best"><td>여러 관점 보여주기 (복잡한 기사)</td><td>✅<small>질문이 많아짐</small></td><td>✅<small>만족감 더 높음</small></td><td>✅<small>합의 100%</small></td><td style="font-size:13px">B1, B2</td></tr>
+    <tr><td>경고성 일러두기</td><td>✅<small>관심을 사로잡음</small></td><td>✅<small>불확실성 인정해도 신뢰 유지</small></td><td>✅<small>기존 믿음에 유연해짐</small></td><td style="font-size:13px">B1</td></tr>
+    <tr><td>만약의 경우</td><td>✅<small>더 강한 호기심</small></td><td>✅<small>신뢰성 강화</small></td><td>✅<small>다양성, 포괄성 지지 상승</small></td><td style="font-size:13px">B1, B2</td></tr>
+    <tr><td>여러 층위의 해결책</td><td>–</td><td>–</td><td>✅<small>"왜"에서 "어떻게"로</small></td><td style="font-size:13px">B3</td></tr>
+    <tr><td>존중 표현 + 섞인 감정</td><td>–</td><td>✅<small>관심 깊은 사람을 더 신뢰</small></td><td>✅<small>더 관대해짐</small></td><td style="font-size:13px">B2, B4</td></tr>
+  </table>
+</div>
+<div class="card">
+  <p><b>왜 이 칸인가</b></p>
+  <details><summary>양측 입장 나란히: 보여줬는데 왜 안 바뀌나</summary><p>반대편 의견을 보는 것만으로는 자기 진영을 다시 생각할 충분조건이 되지 못한다. 두 극단을 제시하면 찬반 각자의 의견이 더 강화된다. 이분법 기사를 읽은 팀은 44%만 합의했다.</p></details>
+  <details><summary>관점 수용: 상상은 정확하지 않다</summary><p>건강보험, 보편기본소득에 대해 상대 입장을 상상하게 하자 다시 생각하는 경향이 덜 수용적이었다. 25회 실험에서 정확도가 오르지 않았고, 틀린 판단에 더 확신하기도 했다. 대안은 상상 대신 묻는 관점 탐색이다.</p></details>
+  <details><summary>경고성 일러두기: 한계를 밝혀도 손해가 없다</summary><p>과학 뉴스에 일러두기를 넣으면 관심을 붙잡고 마음을 연다. 나쁜 식단이 노화를 촉진한다는 논문 기사에서 변수와 한계를 밝히자 독자가 기존 믿음에 더 유연해졌다. "연구가 더 필요하다"는 한 줄도 도움이 됐다. 기자가 불확실성을 인정해도 신뢰가 깎이지 않았고, 전문가가 의심을 표명하면 설득력이 더 높았다.</p></details>
+  <details><summary>만약의 경우: "좋지만 쉽지는 않다"</summary><p>메시지에 미묘한 차이가 담기고 더 정확할 때 사람들은 다양성과 포괄성을 더 높였다. 확신을 덜 가지는 강연자가 오히려 신뢰를 강화하고 관심을 더 붙잡았다.</p></details>
+  <details><summary>여러 층위의 해결책: 해결책 혐오를 피한다</summary><p>총기 규제로 가족을 지키기 어려워진다는 글을 읽은 자유주의자는 침입자 폭력 문제를 묵살했다. 보수주의자는 탄소 배출 감축보다 녹색 기술 제안에 더 호응했다. 극단적 해결책 하나가 아니라 여러 층위를 보여주면 "어떻게"를 묻게 되고 양극화가 줄어든다.</p></details>
+  <details><summary>존중 + 섞인 감정: 감정을 빼는 게 답이 아니다</summary><p>상대가 쟁점에 깊이 관심 있음을 알면 그를 더 신뢰한다. "원칙을 꼿꼿하게 지키는 당신 같은 사람을 존경한다"로 시작하면 상대를 꺾어야 할 대상으로 보는 경향이 줄고 더 관대해진다. 생산적 대화에서는 감정이 다양하게 펼쳐졌다.</p></details>
+</div>
+
+<h2 id="ch8-8"><span class="n">7</span>생산적 대화는 감정이 출렁인다</h2>
+<p class="lead"><b>왜 나오나</b> 저자는 감정을 빼야 다시 생각하기 쉽다고 믿었는데, 그 생각을 뒤집은 증거들이다. 그 앞에서 흔한 조언인 '상대 입장이 돼 보기'가 왜 실패하는지도 보여준다.</p>
+<p class="lead">피터 콜먼은 참가자에게 대화 영상을 다시 보여주며 순간마다 감정을 확인했다(500건 넘게). 비생산적 대화는 한두 감정에 갇혔고, 생산적 대화는 아래처럼 오르내렸다.</p>
+<figure class="card scroll">
+  <svg class="wide" viewBox="0 0 720 250" role="img" aria-label="생산적인 대화의 감정 흐름: 시간에 따라 열한 개의 감정이 위아래로 크게 출렁인다">
+    <line x1="50" y1="20" x2="50" y2="210" stroke="var(--muted)" stroke-width="1.5"/>
+    <line x1="50" y1="210" x2="700" y2="210" stroke="var(--muted)" stroke-width="1.5"/>
+    <text x="58" y="30" class="ok">생산적</text>
+    <text x="58" y="202" class="bad">비생산적</text>
+    <text x="690" y="236" text-anchor="end" class="muted">시간 흐름 →</text>
+    <polyline fill="none" stroke="var(--accent)" stroke-width="2.5" points="90,110 145,140 200,60 255,190 310,90 365,170 420,40 475,70 530,180 585,100 640,30"/>
+    <g fill="var(--card)" stroke="var(--accent)" stroke-width="2">
+      <circle cx="90" cy="110" r="11"/><circle cx="145" cy="140" r="11"/><circle cx="200" cy="60" r="11"/><circle cx="255" cy="190" r="11"/><circle cx="310" cy="90" r="11"/><circle cx="365" cy="170" r="11"/><circle cx="420" cy="40" r="11"/><circle cx="475" cy="70" r="11"/><circle cx="530" cy="180" r="11"/><circle cx="585" cy="100" r="11"/><circle cx="640" cy="30" r="11"/>
+    </g>
+    <g font-size="11" text-anchor="middle">
+      <text x="90" y="114">1</text><text x="145" y="144">2</text><text x="200" y="64">3</text><text x="255" y="194">4</text><text x="310" y="94">5</text><text x="365" y="174">6</text><text x="420" y="44">7</text><text x="475" y="74">8</text><text x="530" y="184">9</text><text x="585" y="104">10</text><text x="640" y="34">11</text>
+    </g>
+  </svg>
+  <ol class="steps">
+    <li>흠, 우리 의견이 서로 다른 것 같네.</li>
+    <li>상관없어. 나는 침착하려고 노력하고 있으니까.</li>
+    <li>근데 우리 사이에는 생각보다 공통점이 많은 것 같아.</li>
+    <li>아아, 정말 실망스러워.</li>
+    <li>저 사람들은 이 주제에 정말 열정적이군. 인정해.</li>
+    <li>그렇지만 어떻게 저 사람들이 이 문제를 진지하게 받아들일 수 있을까?</li>
+    <li>잠깐만, 나는 어떻게 하면 이 문제를 진지하게 받아들일 수 있을까?</li>
+    <li>이런, 지금 저 사람들이 흥미로운 이야기를 하고 있잖아!</li>
+    <li>젠장, 저 사람들이 나를 진짜 화나게 하네.</li>
+    <li>나는 지금 약간 불안하지만 흥분되기도 해.</li>
+    <li>와, 방금 내가 새로운 사실을 하나 배운 거 맞아?</li>
+  </ol>
+  <figcaption>책의 그림 "생산적인 대화 vs. 비생산적인 대화"를 옮겼다. 비생산적 쪽 바닥에는 공격, 믿음 모욕, 욕, 수동공격성, 돌 같은 침묵, 자리 박차기가 놓인다. 생산적 대화에서 감정은 원고의 초고처럼 계속 고쳐진다.</figcaption>
+</figure>
+<div class="card">
+  <div class="two">
+    <div class="panel bad"><p class="label">관점 수용 (상상하기)</p><p>"공화당 지지자는 아마 이렇게 생각하겠지." 민주당 지지자는 인종차별을 인정하는 공화당 지지자 수를, 공화당 지지자는 미국을 자랑스러워하는 민주당 지지자 수를 과소평가한다.</p></div>
+    <div class="panel ok"><p class="label">관점 탐색 (묻기)</p><p>상상하지 말고 대화로 상대 의견 속 미묘한 차이를 찾는다. 과학자가 단서 몇 개로 결론을 그리지 않고 가설을 검증하는 방식이다.</p></div>
+  </div>
+</div>
+
+<div class="conclusion"><p class="c-title">책의 결론</p><ul><li>상대 마음은 상상하지 말고 <b>물어서 찾는다</b>(관점 탐색).</li><li>다시 생각하기를 막는 건 감정 표현이 아니라 <b>감정이 한두 개로 좁아지는 것</b>이다.</li><li>감정은 초고처럼 계속 고쳐진다.</li><li>감정에도 이분법이 있으니, 섞인 감정을 표현할 말이 많을수록 대화가 생산적이 된다.</li></ul></div>
+
+<h2><span class="n">8</span>용어 풀이</h2>
+<div class="card"><div class="terms">
+  <div class="term"><b>이분법 편향</b><p>복잡한 연속체를 두 범주로 나눠 선명함을 얻으려는 성향.</p><p class="ex">"결국 찬성이야 반대야?"</p></div>
+  <div class="term"><b>소망 편향</b><p>믿고 싶은 것을 믿는 성향.</p><p class="ex">"그렇게 심각할 리가 없어. 그럼 다 바꿔야 하잖아."</p></div>
+  <div class="term"><b>해결책 혐오</b><p>해결책이 싫으면 문제 자체를 부정한다.</p><p class="ex">"리라이트요? 그 모듈 별문제 없던데요."</p></div>
+  <div class="term"><b>경고성 일러두기</b><p>결론에 한계를 함께 밝히기.</p><p class="ex">"표본이 작아서 더 확인이 필요해요."</p></div>
+  <div class="term"><b>만약의 경우</b><p>효과가 언제, 어디서, 누구에게 달라지는지 밝히기.</p><p class="ex">"읽기가 많은 API에서만 빨라져요."</p></div>
+  <div class="term"><b>관점 탐색</b><p>상대 마음을 상상하지 않고 직접 묻기.</p><p class="ex">"그 원칙이 왜 중요한지 들어 보고 싶어요."</p></div>
+  <div class="term"><b>아이디어 숭배 집단</b><p>단순한 생각을 설교하고 복잡성을 공격하는 집단.</p><p class="ex">"MBTI 보면 그 사람 다 알아."</p></div>
+  <div class="term"><b>무지의 장막</b><p>결론을 모른 채 방법만 보고 판단하기.</p><p class="ex">"결과 가리고 실험 설계부터 봅시다."</p></div>
+</div></div>
+
+<h2><span class="n">9</span>책 사례를 대화로: 크리스천 쿠퍼의 대답</h2>
+<p class="lead"><b>왜 나오나</b> 2번의 B4 "감정의 이분법"과 7번의 감정 그래프가 사람을 판단할 때 어떻게 드러나는지 보여주는 사례다. 쟁점처럼 사람도 "인종차별주의자냐 아니냐" 두 칸으로 나눌 수 없다는 것, 그리고 섞인 감정을 그대로 말하는 쪽이 다른 사람까지 다시 생각하게 만든다는 것을 대비로 보여준다.</p>
+<div class="card">
+  <h3 id="dialog-cooper">센트럴파크의 새 관찰자 <a class="anchor" href="#dialog-cooper" aria-label="이 대화 링크">#</a></h3>
+  <p class="note">2020년 봄, 새를 구경하던 흑인 크리스천 쿠퍼가 개에게 목줄을 채워 달라고 하자 백인 여성은 경찰에 "아프리카계 미국인이 내 목숨을 위협한다"고 신고했다. 책 흐름을 대화로 재구성했다. 대사는 원문 그대로가 아니다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">단순한 설명</p>
+      <div class="dialog">
+        <div class="line"><span class="who">여성</span><span>나는 인종차별주의자가 아니다. 누구에게도 해를 끼칠 생각이 없었다. 그때 나는 겁에 질렸던 것 같다.</span></div>
+      </div>
+      <p class="verdict bad">왜 그토록 겁에 질렸는지, 왜 경찰에게 거짓말해도 된다고 느꼈는지 되묻지 않는다(B4).</p>
+    </div>
+    <div class="panel ok"><p class="label">크리스천의 복합적인 대답</p>
+      <div class="dialog">
+        <div class="line"><span class="who">질문</span><span>그 여성의 사과를 받아들이시나요?</span></div>
+        <div class="line"><span class="who">크리스천</span><span><span class="tech">인정</span>사과는 진심이라고 생각합니다.</span></div>
+        <div class="line"><span class="who">크리스천</span><span><span class="tech">유보</span>그런데 자기 행동이 인종차별적이었다는 걸 알고 있을지는 모르겠습니다.</span></div>
+        <div class="line"><span class="who">크리스천</span><span><span class="tech">섞인 감정</span>스트레스 상황이었고, 갑작스러웠고, 잘못 판단할 수 있었죠. 그렇지만 그 여성은 그렇게 하고 말았습니다.</span></div>
+        <div class="line"><span class="who">크리스천</span><span><span class="tech">판단 넘기기</span>인종차별주의자일까요? 저도 모릅니다. 답할 수 있는 사람은 그 여성뿐입니다.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="flow" style="margin-top:14px">
+    <div class="box bad">여성의 단순한 설명<small>"나는 인종차별주의자가 아니다"<br>복합적인 감정을 덮는다</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box acc">크리스천의 섞인 대답<small>진심은 인정, 판단은 유보</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box ok">지켜보는 사람들도<br>자기 반응을 다시 생각<small>"당신도 읽으며 복합적인 감정을 느꼈을 것"</small></div>
+  </div>
+  <div class="conclusion"><p class="c-title">책의 결론</p><ul><li><b>사람에게도 이분법은 맞지 않는다.</b> 켄디: 인종차별주의자냐 아니냐는 고정된 정체성이 아니다. 인종차별은 의도만이 아니라 행동도 좌우한다.</li><li><b>다시 생각할 책임은 가해자에게 있다.</b> 복잡성을 불어넣는 일이 피해자의 짐이 되어선 안 된다.</li><li>여성이 자기 믿음과 행동을 돌아봤다면 공감하던 사람들의 모범이 되고, 제도적 인종차별에 대한 더 깊은 논의를 이끌 수 있었다.</li><li>장의 마무리: 전도사, 검사, 정치인에게 복잡성은 불편한 진실이지만, 과학자에게는 <b>이해와 발전의 기회</b>다.</li></ul></div>
+</div>
+
+<h2><span class="n">10</span>개발 현장에 대입하면</h2>
+<p class="lead">지어낸 시나리오다. 실제 사례가 아니다.</p>
+
+<div class="card">
+  <h3 id="scenario-8a">시나리오 A. AI 코딩 도구 도입 대 금지 (이분법 쪼개기) <a class="anchor" href="#scenario-8a" aria-label="이 시나리오 링크">#</a></h3>
+  <p class="note">상황: 회의에서 도입파와 금지파가 맞선다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">흔한 흐름</p>
+      <div class="dialog">
+        <div class="line"><span class="who">진행자</span><span>찬반 투표로 정하죠.</span></div>
+      </div>
+      <p class="verdict bad">도입으로 정해지지만 금지파는 리뷰마다 반대 코멘트를 단다(B1).</p>
+    </div>
+    <div class="panel ok"><p class="label">책 방식</p>
+      <div class="dialog">
+        <div class="line"><span class="who">진행자</span><span><span class="tech">쪼개기</span>도입이냐 금지냐 말고, 테스트 코드, 결제 로직처럼 작업별로 보면 어떠세요?</span></div>
+        <div class="line"><span class="who">금지파</span><span>나눠도 결국 쓰자는 얘기잖아요.</span></div>
+        <div class="line"><span class="who">진행자</span><span><span class="tech">반영</span>결국 다 열리게 될까 봐 걱정되시는 거네요.</span></div>
+        <div class="line"><span class="who">금지파</span><span>네. 한번 열면 결제 코드까지 들어가요. 외부 라이브러리도 그렇게 퍼졌고요.</span></div>
+        <div class="line"><span class="who">진행자</span><span><span class="tech">관점 탐색</span>그때 뭐가 있었으면 안 퍼졌을까요?</span></div>
+        <div class="line"><span class="who">금지파</span><span>어디까지 쓰는지 선이요. 테스트 코드 정도는 저도 괜찮아요.</span></div>
+        <div class="line"><span class="who">진행자</span><span><span class="tech">요약</span>선이 있어야 하고, 테스트 코드는 괜찮다는 거죠. 선 긋는 초안은 누가 써 볼까요?</span></div>
+        <div class="line"><span class="who">금지파</span><span>제가 써 볼게요. 어디까지 열지는 아직 모르겠지만요.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">쟁점을 칸으로 쪼개자 동의하는 칸이 보였고, 반대하던 사람이 선을 긋는 역할을 맡았다.</p>
+</div>
+
+<div class="card">
+  <h3 id="scenario-8b">시나리오 B. "원인 확실해요?"라는 다른 팀 리드 (일러두기, 만약의 경우) <a class="anchor" href="#scenario-8b" aria-label="이 시나리오 링크">#</a></h3>
+  <p class="note">상황: 장애 회고에서 연동 팀 리드 G가 "저번에도 확실하다더니 또 났잖아요"라고 묻는다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">흔한 흐름</p>
+      <div class="dialog">
+        <div class="line"><span class="who">개발자</span><span>이번엔 확실합니다. 커넥션 풀 문제였어요.</span></div>
+      </div>
+      <p class="verdict bad">2주 뒤 다른 원인으로 재발하고 G는 이 팀 보고를 안 믿게 된다.</p>
+    </div>
+    <div class="panel ok"><p class="label">책 방식</p>
+      <div class="dialog">
+        <div class="line"><span class="who">개발자</span><span><span class="tech">일러두기</span>확인된 건 커넥션 풀 고갈까지예요. 왜 그때 몰렸는지는 아직 몰라요.</span></div>
+        <div class="line"><span class="who">G</span><span>결국 모른다는 거네요.</span></div>
+        <div class="line"><span class="who">개발자</span><span><span class="tech">반영</span>저번 일 때문에 이번 보고도 믿기 어려우신 거죠.</span></div>
+        <div class="line"><span class="who">G</span><span>네. 그거 믿고 재시도 로직 뺐다가 우리도 같이 터졌어요.</span></div>
+        <div class="line"><span class="who">개발자</span><span><span class="tech">만약의 경우</span>평소 트래픽에선 재발 안 하는 걸 확인했고, 배치 시간대는 아직이에요. 어떤 정보가 있으면 재시도 로직을 정하실 수 있을까요?</span></div>
+        <div class="line"><span class="who">G</span><span>위험한 시간대만 알면 그때 재시도를 켜 둘 수 있죠.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">아는 것과 모르는 것을 나눠 말하자 오히려 신뢰가 생겼다.</p>
+</div>
+
+<div class="card">
+  <h3 id="scenario-8c">시나리오 C. 기술 부채가 문제없다는 PO (해결책 혐오) <a class="anchor" href="#scenario-8c" aria-label="이 시나리오 링크">#</a></h3>
+  <p class="note">상황: 배포마다 장애 나는 모듈. 개발팀이 "한 분기 멈추고 다시 짜자"고 하자 PO H는 "그렇게 문제인가요?"라고 한다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">흔한 흐름</p>
+      <div class="dialog">
+        <div class="line"><span class="who">리드</span><span>장애 로그 보세요. 안 고치면 계속 터집니다.</span></div>
+      </div>
+      <p class="verdict bad">증거를 들이밀수록 문제를 작게 본다. 싫은 건 '한 분기 중단'이다(B3).</p>
+    </div>
+    <div class="panel ok"><p class="label">책 방식</p>
+      <div class="dialog">
+        <div class="line"><span class="who">리드</span><span><span class="tech">진짜 궁금함</span>이 모듈 얘기 나올 때 제일 걸리는 게 뭐예요?</span></div>
+        <div class="line"><span class="who">H</span><span>개발팀은 고치자 할 때마다 다 멈추자고 하잖아요.</span></div>
+        <div class="line"><span class="who">리드</span><span><span class="tech">반영</span>고치자는 말이 로드맵을 멈추자는 말로 들리셨군요.</span></div>
+        <div class="line"><span class="who">H</span><span>지난번에 석 달 날리고 출시 약속 다 어겼어요. 제가 사과했고요.</span></div>
+        <div class="line"><span class="who">리드</span><span><span class="tech">여러 해법</span>방법이 하나는 아니에요. 스프린트마다 20%만, 장애 잦은 함수 두 개만, 기능 넣을 때 그 부분만. 덜 부담되는 게 있을까요?</span></div>
+        <div class="line"><span class="who">H</span><span>20%면 생각은 해 볼게요. 출시 약속만 안 깨지면요.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">해법을 여러 개 펼치자 "왜 문제냐"가 "어떻게 하냐"로 바뀌었다.</p>
+</div>
+
+<div class="card">
+  <h3 id="scenario-8d">시나리오 D. 세 번째 반려된 PR (존중, 관점 탐색, 섞인 감정) <a class="anchor" href="#scenario-8d" aria-label="이 시나리오 링크">#</a></h3>
+  <p class="note">상황: 시니어 I가 "도메인 레이어에 프레임워크 코드 금지" 원칙으로 주니어 J의 PR을 세 번째 반려했다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">흔한 흐름</p>
+      <div class="dialog">
+        <div class="line"><span class="who">J</span><span>그 원칙 과한 것 같아요. 다른 팀은 다 써요.</span></div>
+        <div class="line"><span class="who">I</span><span>원칙은 원칙이야.</span></div>
+      </div>
+      <p class="verdict bad">감정은 짜증 하나로 좁혀진다(B4).</p>
+    </div>
+    <div class="panel ok"><p class="label">책 방식</p>
+      <div class="dialog">
+        <div class="line"><span class="who">J</span><span><span class="tech">존중, 섞인 감정</span>원칙 지키시는 건 배우고 싶어요. 솔직히 세 번째라 지치기도 하는데, 왜 중요한지는 진짜 궁금해요.</span></div>
+        <div class="line"><span class="who">I</span><span>그냥 깔끔하게 하자는 거야.</span></div>
+        <div class="line"><span class="who">J</span><span><span class="tech">관점 탐색</span>예전에 이 원칙이 없어서 고생하신 적 있으세요?</span></div>
+        <div class="line"><span class="who">I</span><span>프레임워크 업그레이드 때 도메인 코드까지 다 뜯었어. 두 달 걸렸지.</span></div>
+        <div class="line"><span class="who">J</span><span><span class="tech">반영</span>그 두 달을 다시 안 겪으려는 거군요.</span></div>
+        <div class="line"><span class="who">I</span><span>그렇지. 코드 길어지는 건 나도 알아.</span></div>
+        <div class="line"><span class="who">J</span><span><span class="tech">배우는 질문</span>그럼 꼭 지켜야 할 선은 어디라고 보세요?</span></div>
+        <div class="line"><span class="who">I</span><span>어노테이션은 봐줄게. 프레임워크 타입이 메서드 시그니처에 들어오는 것만 막자.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">원칙의 옳고 그름 대신 원칙 뒤의 경험을 물었고, 선은 I가 직접 정했다.</p>
+</div>
+</section>
+
+<!-- ======================= 9장 ======================= -->
+<section class="chapter" id="ch9">
+<p class="kicker">9장 · 자신의 지식을 의심하게 가르치다</p>
+<h1>교과서 다시 쓰기</h1>
+
+<div class="card tldr">
+  <p><b>한 줄 요약</b>좋은 교사는 새로운 생각으로, 위대한 교사는 새롭게 생각하는 방식으로 인도한다.</p>
+  <p><b>안 통하는 것</b>정답 주입, 감탄을 부르는 명강의, 해마다 똑같은 커리큘럼, 첫 결과물을 완성품으로 보기.</p>
+  <p><b>통하는 것</b>틀린 교과서 다시 쓰기, 능동학습, 해마다 20% 버리기, 여러 초안과 결과물 비평. 비교는 <a href="#cmp9">8번</a>.</p>
+</div>
+
+<div class="card">
+  <p class="cast-title">등장인물</p>
+  <div class="cast">
+    <div class="who-card"><b>에린 매카시</b><span class="role">중학교 사회 교사</span><p>1940년 교과서를 읽히고 다시 쓰게 함</p><a href="#ch9-2" class="where">1번</a></div>
+    <div class="who-card"><b>8학년 학생</b><span class="role">에린의 학생</span><p>"남성은 왜 없어요?"라고 물은 학생</p><a href="#dialog-erin" class="where">1번</a></div>
+    <div class="who-card"><b>데보라 켈레멘</b><span class="role">심리학자</span><p>과학적 발상 = 제2외국어 배우기</p><a href="#ch9-3" class="where">2번</a></div>
+    <div class="who-card"><b>물리학 수업 실험</b><span class="role">강의 대 능동학습</span><p>즐거움과 학습량이 엇갈림</p><a href="#ch9-4" class="where">3번</a></div>
+    <div class="who-card"><b>STEM 메타분석</b><span class="role">225개 논문</span><p>학부생 4만 6,000명 이상 분석</p><a href="#ch9-4" class="where">3번</a></div>
+    <div class="who-card"><b>로버트 노직</b><span class="role">철학자</span><p>40년 동안 같은 수업을 딱 두 번</p><a href="#ch9-5" class="where">4번</a></div>
+    <div class="who-card"><b>경험 기계</b><span class="role">노직의 사고실험</span><p>무한한 즐거움을 주는 가상 삶</p><a href="#ch9-5" class="where">4번</a></div>
+    <div class="who-card"><b>연속 A 학점 세 학생</b><span class="role">저자의 학생</span><p>테드 강연의 위험을 꼬집은 미니 테드</p><a href="#ch9-5" class="where">4번</a></div>
+    <div class="who-card"><b>카렌 아놀드</b><span class="role">교육학자</span><p>졸업생 대표는 선지자가 되기 어렵다</p><a href="#ch9-5" class="where">4번</a></div>
+    <div class="who-card"><b>로런 매캔</b><span class="role">저자의 학생</span><p>'1학년 때 나에게 보내는 편지'</p><a href="#ch9-5" class="where">4번</a></div>
+    <div class="who-card"><b>론 버거</b><span class="role">초등 교사, 목수</span><p>교육 개척자들이 꼽은 최고의 교사</p><a href="#ch9-7" class="where">6번</a></div>
+    <div class="who-card"><b>엘에듀케이션</b><span class="role">교육 기관</span><p>론이 선임연구관, 150개 학교와 협업</p><a href="#ch9-8" class="where">7번</a></div>
+    <div class="who-card"><b>오스틴</b><span class="role">1학년 학생</span><p>나비를 여섯 번 그린 아이</p><a href="#dialog-austin" class="where">7번</a></div>
+  </div>
+</div>
+
+<h2 id="ch9-2"><span class="n">1</span>에린의 교실: 틀린 교과서를 일부러 읽힌다</h2>
+<p class="lead"><b>왜 나오나</b> 장 제목 '교과서 다시 쓰기'가 나온 사례다. 학생이 자기 지식을 의심하도록 가르치는 교사의 본보기로 꺼냈다.</p>
+<p class="lead">밀워키에서 8년 동안 사회학을 가르친 에린 매카시는 2020년 '위스콘신 올해의 교사상'을 받았다. 학생이 교재가 틀렸다고 불평하자 그걸 수업으로 바꿨다.</p>
+<div class="card">
+  <div class="flow">
+    <div class="box">1940년 교과서 읽기<small>숙제</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box wait">교과서도 틀린다<small>일부 학생은 충격</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box acc">"누구 이야기가<br>빠졌을까?"</div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box ok">모둠별로<br>한 장 다시 쓰기</div>
+  </div>
+  <p class="note" style="margin-top:12px">시민권 장을 고른 모둠은 1940년대 초 취소됐지만 20년 뒤 마틴 루서 킹의 행진에 영감을 준 '워싱턴 행진'을 보충했다. 제2차 세계대전 장을 고른 모둠은 히스패닉계 병사와 일본계 2세로 구성된 보병연대를 보충했다. 에린: "엄청나고도 갑작스러운 깨달음의 순간이죠."</p>
+  <h3 id="dialog-erin" style="margin-top:16px">서부 개척 단원의 질문 <a class="anchor" href="#dialog-erin" aria-label="이 대화 링크">#</a></h3>
+  <p class="note">에린은 주인공과 인칭대명사를 모두 여성으로 쓴 교재를 만들었다. 책 흐름을 대화로 재구성했다. 대사는 원문 그대로가 아니다.</p>
+  <div class="dialog">
+    <div class="line"><span class="who">학생</span><span>이 교재엔 남자가 왜 없어요?</span></div>
+    <div class="line"><span class="who">에린</span><span>그래도 남성 한 명은 주인공으로 들어가 있어. 나머지 남성들은 여성들 주변에 있긴 했지만 중요한 일은 하지 않았으니까 언급하지 않은 거야.</span></div>
+    <div class="line"><span class="who">학생</span><span>(…)</span></div>
+  </div>
+  <p class="why">질문한 학생은 한 집단 전체가 수백 년 동안 소외당하는 게 어떤 건지 문득 깨달았다. 에린은 설명하지 않고 같은 일을 거꾸로 겪게 했다.</p>
+</div>
+
+<div class="conclusion"><p class="c-title">책의 결론</p><ul><li>학생들은 교과서도 틀리고 <b>지식은 진화한다</b>는 걸 배우며 과학자처럼 생각하기 시작했다.</li><li>우리는 모두 부모, 멘토, 동료로서 누군가를 가르친다.</li><li>가르치는 사람은 상대가 <b>자기와 남에 대한 생각을 의심하도록</b> 장려해야 한다.</li></ul></div>
+
+<h2 id="ch9-3"><span class="n">2</span>정답만 배우면 빠지는 고리: 과도한 확신 사이클</h2>
+<p class="lead"><b>왜 나오나</b> 정답만 주입받으면 어떻게 되는지 보여준다. 과학 시간에 한 번도 경이를 느끼지 못했다는 저자의 아쉬움에서 출발한다.</p>
+<p class="lead">자부심이 확신의 연료가 되고, 확증 편향과 소망 편향이 잘못된 지식에 정당성을 준다. 책은 평평한 지구를 믿는 사람의 사이클로 보여준다.</p>
+<figure class="card scroll">
+  <svg class="wide" viewBox="0 0 720 400" role="img" aria-label="평평한 지구를 믿는 과도한 확신 사이클: 아홉 단계가 원을 그리며 다시 처음으로 돌아온다">
+    <ellipse cx="360" cy="200" rx="250" ry="160" fill="none" stroke="var(--line)" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="360" y="192" text-anchor="middle" class="bad b">돌수록 확신이 커진다</text>
+    <text x="360" y="214" text-anchor="middle" class="muted">시계 방향으로 1 → 9 → 1</text>
+    <g stroke-width="1.5">
+      <rect x="275" y="22" width="170" height="36" rx="8" fill="var(--bad-bg)" stroke="var(--bad)"/>
+      <rect x="436" y="59" width="170" height="36" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <rect x="521" y="154" width="170" height="36" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <rect x="492" y="262" width="170" height="36" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <rect x="361" y="332" width="170" height="36" rx="8" fill="var(--wait-bg)" stroke="var(--wait)"/>
+      <rect x="189" y="332" width="170" height="36" rx="8" fill="var(--wait-bg)" stroke="var(--wait)"/>
+      <rect x="58" y="262" width="170" height="36" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <rect x="29" y="154" width="170" height="36" rx="8" fill="var(--card)" stroke="var(--line)"/>
+      <rect x="114" y="59" width="170" height="36" rx="8" fill="var(--card)" stroke="var(--line)"/>
+    </g>
+    <text x="360" y="45" text-anchor="middle">1 지구가 평평하대!</text>
+    <text x="521" y="82" text-anchor="middle">2 모임에 가입할 거야</text>
+    <text x="606" y="177" text-anchor="middle">3 증거가 여기 다 있어</text>
+    <text x="577" y="285" text-anchor="middle">4 우린 프리스비 위에 살아</text>
+    <text x="446" y="355" text-anchor="middle">5 사람들이 짜증 내네</text>
+    <text x="274" y="355" text-anchor="middle">6 비웃음, 그래서 방어</text>
+    <text x="143" y="285" text-anchor="middle">7 중요한 일을 하는 거야</text>
+    <text x="114" y="177" text-anchor="middle">8 푹 빠져 있어</text>
+    <text x="199" y="82" text-anchor="middle">9 친구들과 증거 공유</text>
+  </svg>
+  <figcaption>책의 그림 "평평한 지구를 믿는 과도한 확신 사이클"을 옮겼다. 반대에 부딪힐수록(5, 6) 오히려 "중요한 일"이라는 확신(7)이 커진다.</figcaption>
+</figure>
+<div class="card">
+  <p>심리학자 데보라 켈레멘: "직관과 다른 과학적 발상을 배우는 건 제2외국어를 유창하게 배우는 것과 비슷하다. 어릴 때 배우면 쉽고, 단편적으로 가끔 배워서는 온전하게 배울 수 없다." 그래서 아이들에게 필요한 건 <b>아는 것을 자주 버려 보는 일</b>이다.</p>
+  <p class="cast-title" style="margin-top:12px">팩트체크하는 사람처럼 생각하기 3원칙</p>
+  <div class="paths">
+    <div class="path"><span class="pid">①</span><b>파고든다</b><small>정보를 단순히 소비하지 않는다.</small></div>
+    <div class="path"><span class="pid">②</span><b>지위를 믿지 않는다</b><small>높은 지위나 인기를 신뢰성의 근거로 삼지 않는다.</small></div>
+    <div class="path"><span class="pid">③</span><b>원천을 찾는다</b><small>발신자가 최초 원천이 아닌 경우가 많다.</small></div>
+  </div>
+  <p class="note" style="margin-top:10px">모든 해석이 타당하다는 뜻은 아니다. 에린은 홀로코스트 부정 주장의 증거를 꼼꼼히 살펴본 뒤 거부하라고 가르쳤다. 저자 집 식탁에서는 "명왕성은 행성", "콜럼버스가 아메리카를 발견" 같은 신화를 깨는 토론을 한다.</p>
+</div>
+
+<div class="conclusion"><p class="c-title">책의 결론</p><ul><li>남의 틀린 믿음을 배우는 것과 <b>내 믿음을 스스로 버리는 법</b>을 배우는 건 다르다.</li><li>어릴 때 바로잡지 않으면 확신 사이클에 갇혀 고치기 어렵다.</li><li>그래서 정답이 하나인 질문을 줄이고 팩트체크하듯 생각하게 가르친다. 단, 모든 해석이 타당하다는 뜻은 아니다.</li><li>다시 생각하기에는 규칙적인 습관이 필요한데, 전통 교육은 그걸 허용하지 않는다.</li></ul></div>
+
+<h2 id="ch9-4"><span class="n">3</span>아연실색 효과: 즐거운 강의, 덜 배운 학생</h2>
+<p class="lead"><b>왜 나오나</b> 저자 자신이 '즐겁게 배우면 더 많이 배운다'고 믿다가 틀렸음을 깨달은 실험이다. 강의가 왜 다시 생각하기를 막는지 보여준다.</p>
+<p class="lead">물리학 수업 12주째 실험. 한 집단은 정역학을 강의로, 유동체를 능동학습으로 배웠고 다른 집단은 반대로 배웠다. 자료는 같았다.</p>
+<div class="card">
+  <div class="two">
+    <div class="panel bad"><p class="label">강의</p><p>강사가 슬라이드로 설명하고 예제를 푼다. 학생은 메모한다.</p><p class="verdict ok">✅ 더 즐겼고, 강사를 더 유능하게 평가</p><p class="verdict bad">❌ 덜 배웠다</p></div>
+    <div class="panel ok"><p class="label">능동학습</p><p>학생이 소집단으로 문제를 만들어 푼다. 강사는 돌아다니며 질문하고 팁을 준다.</p><p class="verdict bad">⚠️ 정신적 노력이 더 들어 재미는 덜함</p><p class="verdict ok">✅ 더 많이, 더 깊이 배웠다</p></div>
+  </div>
+  <div class="nums" style="margin-top:14px">
+    <div class="num"><b>225편</b><span>STEM 능동학습 메타분석 논문</span></div>
+    <div class="num"><b>4만 6,000명+</b><span>참가한 학부생</span></div>
+    <div class="num"><b>약 0.5등급</b><span>강의식 수강생이 더 낮게 받은 점수</span></div>
+    <div class="num"><b>350만 달러+</b><span>강의식 낙제생이 아꼈을 등록금 추정</span></div>
+  </div>
+  <p class="note" style="margin-top:12px">사회과학자는 경외효과(awestruck effect)라 부르지만 저자는 <b>아연실색 효과</b>(dumbstruck effect)가 더 정확하다고 본다. 격려하는 메시지를 들으면 내용에 주의를 덜 기울이고 쉽게 잊는다. 강의는 반대 의견을 원천 차단하고, 잘못된 개념을 바로잡아야 할 때 특히 효과가 떨어진다.</p>
+</div>
+<div class="card">
+  <p><b>그런데도 강의가 기본값이다</b> (북미 대학 STEM 교수)</p>
+  <div class="bars" style="margin-top:10px">
+    <div class="bar"><span>수업의 80% 이상을 강의</span><div class="track"><div class="fill bad" style="width:52%">절반 이상</div></div></div>
+    <div class="bar"><span>쌍방향 소통</span><div class="track"><div class="fill wait" style="width:26%">25%+</div></div></div>
+    <div class="bar"><span>능동학습 중심</span><div class="track"><div class="fill ok" style="width:19%">20% 미만</div></div></div>
+  </div>
+  <p class="note" style="margin-top:10px">고등학교는 교사 절반이 거의 강의에 의존한다. 중학교에서는 강의 시간이 많을수록 수학, 과학 점수가 높다는 증거도 있는데, 이유는 아직 모른다. 강의를 없애자는 게 아니라 강의만으로는 평생 학습자를 만들지 못한다는 이야기다.</p>
+</div>
+
+<div class="conclusion"><p class="c-title">책의 결론</p><ul><li><b>즐거움과 배움은 다르다.</b></li><li>강의는 반대 의견을 막고 듣는 사람을 수동적으로 만든다. 감탄할수록 내용은 덜 듣는다.</li><li>주장의 포장이 아니라 <b>내용에 설득돼야</b> 한다.</li><li>강의를 없애자는 게 아니라, 강의만으로는 평생 학습자를 만들지 못한다는 것이다.</li></ul></div>
+
+<h2 id="ch9-5"><span class="n">4</span>노직의 수업과 저자의 실험: 해마다 버리고 비운다</h2>
+<p class="lead"><b>왜 나오나</b> 노직은 가르치면서 계속 배우고, 방법론을 해마다 고친 본보기다. 저자가 그를 따라 해 보며 겪은 시행착오를 보여준다.</p>
+<p class="lead">철학자 로버트 노직은 40년 동안 같은 수업을 딱 두 번만 가르쳤다. "번드르르한 의견을 제시해서는 독창적인 작업이 어떤 느낌인지 알려줄 수 없다."</p>
+<div class="card">
+  <p><b>경험 기계 실험</b> "이미 기계 속에서 살고 있었다면 플러그를 뽑겠는가?"</p>
+  <div class="bars" style="margin-top:8px">
+    <div class="bar"><span>기계 속 삶을 계속 살겠다</span><div class="track"><div class="fill wait" style="width:46%">46%</div></div></div>
+  </div>
+  <p class="note">그중 절반은 진짜 삶이 모나코의 억만장자 예술가라고 해도 기계를 골랐다. 익숙한 현실에서 벗어나기 싫은 현상 유지 편향이다. 노직은 강의실에서 그 반대, 해마다 새 주제를 가르치는 자기만의 경험 기계를 만들었다.</p>
+</div>
+<div class="card">
+  <p><b>저자의 강좌가 바뀐 순서</b></p>
+  <div class="flow" style="margin-top:10px">
+    <div class="box">해마다<br>20% 버리기<small>노직 벤치마킹</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box wait">남은 80%가 문제<small>다시 생각할 여유가 없음</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box acc">반론 미니 테드<small>최종 점수의 20%</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box acc">강의는<br>20~30분만<small>나머지는 능동학습</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box ok">하루를<br>통째로 비우기<small>학생이 설계</small></div>
+  </div>
+  <p class="note" style="margin-top:12px">반론 과제를 가장 열심히 한 건 연속 A 학점 완벽주의자였다. 완벽주의자는 성적은 좋지만 업무 성과는 동료보다 높지 않다. 가장 창의적인 건축가 집단은 학교 평점이 평균 B였다. 교육학자 카렌 아놀드: "졸업생 대표는 체제를 뒤흔들기보다 안주한다." A 학점 세 학생의 미니 테드: "해답을 추종하는 경향을 거스를 용기가 있다면 지금 당장 이 동영상을 끄세요."</p>
+  <p class="note">비운 하루에 가장 인기를 끈 건 로런 매캔의 아이디어였다. 1학년 때의 자신에게 편지를 쓰게 했고, 이를 모은 '펜실베이니아 신입생 여러분에게' 사이트는 하루 만에 방문객 1만 명을 넘겼다. 다른 여섯 개 대학이 비슷한 사이트를 열었다.</p>
+</div>
+
+<div class="conclusion"><p class="c-title">책의 결론</p><ul><li>내용 20%를 바꾸는 것만으로는 부족했다. 학생에게 <b>다시 생각할 여유</b>를 줘야 했다.</li><li>틀리지 않으려는 A 학점형까지 움직이려면 <b>보상 규칙을 바꿔야</b> 했다.</li><li>강좌 구조조차 돌에 새기지 말고 학생이 다시 설계하게 한다.</li><li>학교 밖에서도 인생의 전환점마다 "진작 알았으면 좋았을 것"을 물을 수 있다.</li></ul></div>
+
+<h2 id="ch9-6"><span class="n">5</span>다시 생각하기를 막는 교실의 길 4개</h2>
+<p class="lead">이 ID가 아래 비교표의 마지막 열이 된다.</p>
+<div class="card"><div class="paths">
+  <div class="path"><span class="pid">L1</span><b>정답 주입</b><small>궁금해하기도 전에 답을 받는다. 남의 틀린 믿음은 배워도 내 믿음을 버리는 법은 못 배운다.</small></div>
+  <div class="path"><span class="pid">L2</span><b>감탄하느라 안 듣기</b><small>아연실색 효과. 포장에 사로잡혀 내용을 잊는다.</small></div>
+  <div class="path"><span class="pid">L3</span><b>틀리지 않으려 하기</b><small>A 학점형은 기존 원칙을 다시 생각하는 위험을 무릅쓰지 않는다.</small></div>
+  <div class="path"><span class="pid">L4</span><b>자기 자신을 판단하기</b><small>초고가 별로면 "나는 최악"이 되어 포기한다.</small></div>
+</div></div>
+
+<h2 id="ch9-7"><span class="n">6</span>자기 자신 판단하기 대 자기 과제를 판단하기</h2>
+<p class="lead"><b>왜 나오나</b> 교육 개척자들이 한목소리로 최고의 교사로 꼽은 론 버거가 어떻게 아이들을 다시 생각하게 만드는지 보여준다.</p>
+<p class="lead">론 버거는 식탁 의자가 삐걱거리면 연장을 빌려 그 자리에서 고치는 사람이다. 시골 공립 초등학교에서 가르치며 주말에는 목수로 일했다. 그의 학급은 결과물을 비평하지 사람을 비평하지 않는다.</p>
+<div class="card">
+  <div class="two">
+    <div class="panel bad"><p class="label">자기 자신을 판단 (L4)</p>
+      <div class="col">
+        <div class="box">아이디어를 생각한다</div><span class="arrow" aria-hidden="true">↓</span>
+        <div class="box">나는 천재다</div><span class="arrow" aria-hidden="true">↓</span>
+        <div class="box">초고를 쓴다</div><span class="arrow" aria-hidden="true">↓</span>
+        <div class="box wait">나는 역대 최악의 작가일지도</div><span class="arrow" aria-hidden="true">↓</span>
+        <div class="box wait">일찌감치 포기해야 한다</div><span class="arrow" aria-hidden="true">↓</span>
+        <div class="box bad"><b>내팽개친다</b></div>
+      </div>
+    </div>
+    <div class="panel ok"><p class="label">자기 과제를 판단</p>
+      <div class="col">
+        <div class="box">아이디어를 생각한다</div><span class="arrow" aria-hidden="true">↓</span>
+        <div class="box">이건 천재적 발상이다</div><span class="arrow" aria-hidden="true">↓</span>
+        <div class="box">초고를 쓴다</div><span class="arrow" aria-hidden="true">↓</span>
+        <div class="box wait">역대 최악의 작품일지도</div><span class="arrow" aria-hidden="true">↓</span>
+        <div class="box acc">이것을 다시 써야 한다</div><span class="arrow" aria-hidden="true">↓</span>
+        <div class="box ok"><b>작품이 더 나아진다</b></div>
+      </div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:12px">책의 그림을 옮겼다. 두 길은 넷째 칸까지 똑같다. 갈리는 건 "최악"이라는 판단이 나를 향하느냐 결과물을 향하느냐다.</p>
+</div>
+<div class="card">
+  <p><b>론의 학급 규칙</b></p>
+  <div class="paths">
+    <div class="path"><span class="pid">R1</span><b>고심해야 할 과제</b><small>답을 주지 않고 혼자 생각 → 짝과 다듬기 → 전체 공유(think-pair-share). 동물 분류 체계도 아이들이 만든다.</small></div>
+    <div class="path"><span class="pid">R2</span><b>네 개의 버전</b><small>"서로 다른 네 개의 버전으로 그려 볼 거야." 많은 아이가 초안을 여덟 개, 열 개씩 그렸다.</small></div>
+    <div class="path"><span class="pid">R3</span><b>갤러리 비평, 심화 비평</b><small>모두 전시하고 무엇이 왜 뛰어난지 토론. 또는 하나를 놓고 어떻게 더 나아질지 집중 토론.</small></div>
+    <div class="path"><span class="pid">R4</span><b>말하는 방식</b><small>"이건 좋지 않아" 대신 "나는 이렇게 생각해". "그렇게 한 이유를 꼭 듣고 싶어", "이런 점은 생각해봤어?"</small></div>
+  </div>
+  <p class="note" style="margin-top:10px">론: "뛰어나다는 건 다시 생각하기, 다시 작업하기, 반짝반짝 광내기를 뜻합니다. 아이들은 조롱이 아니라 박수를 받는다고 느껴야 합니다." 한 학생은 "나에게는 혼란의 시간이 필요합니다"라고 했다. 혼란은 탐구할 영역이 있다는 단서다.</p>
+</div>
+
+<div class="conclusion"><p class="c-title">책의 결론</p><ul><li>혼란을 빨리 걷어 내지 말고 끌어안게 한다. <b>혼란은 탐구할 단서</b>다.</li><li>뛰어나다는 건 다시 생각하고 다시 작업하는 것이다.</li><li>비평이 <b>사람이 아니라 결과물</b>을 향해야 아이들이 박수를 받는다고 느끼고 스스로 기준을 높인다.</li></ul></div>
+
+<h2 id="ch9-8"><span class="n">7</span>오스틴의 나비: 1학년이 그린 여섯 장</h2>
+<p class="lead"><b>왜 나오나</b> 론의 방식(여러 초안과 결과물 비평)이 실제로 어떤 결과를 내는지, 여덟 살 아이의 나비 그림으로 보여주는 장면이다.</p>
+<p class="lead">론이 선임연구관으로 있는 엘에듀케이션과 연계된 아이다호의 학교. 1학년 오스틴은 과학적으로 정확한 나비를 그리는 과제를 받았다.</p>
+<div class="card">
+  <div class="flow">
+    <div class="box">첫 번째 그림</div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box acc">비평<small>날개 형태 제안 2번</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box">2, 3번째</div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box acc">비평<small>두 날개가 다르고<br>다시 둥글어졌다</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box">4번째</div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box acc">비평<small>날개에 문양을</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box">5번째</div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box ok">마지막<small>색을 넣었다</small></div>
+  </div>
+  <h3 id="dialog-austin" style="margin-top:16px">급우 비평단과 오스틴 <a class="anchor" href="#dialog-austin" aria-label="이 대화 링크">#</a></h3>
+  <p class="note">책 흐름을 대화로 재구성했다. 대사는 원문 그대로가 아니고, 책에 나온 제안 내용만 썼다.</p>
+  <div class="dialog">
+    <div class="line"><span class="who">비평단</span><span><span class="tech">결과물 비평</span>날개 모양을 이렇게 바꿔 보면 어떨까?</span></div>
+    <div class="line"><span class="who">오스틴</span><span>(두 번째, 세 번째 그림을 그린다)</span></div>
+    <div class="line"><span class="who">비평단</span><span><span class="tech">구체적 관찰</span>두 날개가 똑같지 않고, 다시 둥글어졌어.</span></div>
+    <div class="line"><span class="who">오스틴</span><span>(실망하지 않고 네 번째 그림을 그린다)</span></div>
+    <div class="line"><span class="who">비평단</span><span><span class="tech">다음 한 걸음</span>날개에 문양을 그려 넣으면 어떨까?</span></div>
+    <div class="line"><span class="who">오스틴</span><span>(다섯 번째 그림, 그리고 마지막 그림에 색을 넣는다)</span></div>
+  </div>
+  <p class="why">론이 완성된 나비를 학급 전체에 보여주자 아이들은 오스틴의 발전에 감탄했다. 비평은 오스틴이라는 사람이 아니라 날개를 향했고, 매번 다음 한 걸음만 제안했다. 저자는 이후 자기 아이들에게도 여러 번 초안을 잡게 한다. 아이들은 조잡한 초안을 벽에 걸어두고 좋아했지만 마지막 그림을 훨씬 더 자랑스러워했다.</p>
+</div>
+
+<div class="conclusion"><p class="c-title">책의 결론</p><ul><li>좋은 교사는 새로운 생각으로, 위대한 교사는 <b>새롭게 생각하는 방식</b>으로 인도한다.</li><li>교육은 정보를 쌓는 게 아니라 <b>자기 결과물을 계속 고쳐 나가는 습관</b>이다.</li><li>교사가 아니어도 누구나 겸손함과 호기심으로 더 잘 가르칠 수 있다. 9장 전체의 결론이다.</li></ul></div>
+
+<h2 id="cmp9"><span class="n">8</span>비교표: 어떻게 가르치면 다시 생각하나</h2>
+<div class="card">
+  <p><b>표를 읽는 법</b> 배우는 사람이 거치는 세 단계로 각 방식을 본다. 사내 아키텍처 세미나로 예를 들면 이렇다.</p>
+  <div class="flow" style="margin-top:12px">
+    <div class="box">① 즐겁다<small>"오늘 세미나<br>재밌었다"</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box">② 배운 게 남는다<small>다음 주에도<br>설명할 수 있다</small></div>
+    <span class="arrow" aria-hidden="true">→</span>
+    <div class="box ok">③ 스스로 고쳐 생각한다<small>"내 PR 구조가<br>틀렸었네" 하고 고친다</small></div>
+  </div>
+  <p class="note" style="margin-top:12px">이 장의 목표는 ③이다. ①이 높다고 ②, ③이 따라오지 않는다는 게 아연실색 효과다.</p>
+</div>
+<div class="card scroll">
+  <div class="legend"><span>✅ 됐다</span><span>⚠️ 일부만</span><span>❌ 안 됐다</span><span>– 책에 근거 없음</span></div>
+  <table class="cmp">
+    <tr><th>방식</th><th>① 즐겁다</th><th>② 배운 게 남는다</th><th>③ 스스로 고쳐 생각한다</th><th>막아 낸 길</th></tr>
+    <tr><td>강의</td><td>✅<small>더 즐김</small></td><td>❌<small>약 0.5등급 낮음</small></td><td>❌<small>반대 의견 차단</small></td><td style="font-size:13px">없음<small>L1, L2에 빠짐</small></td></tr>
+    <tr><td>능동학습</td><td>⚠️<small>재미 덜함</small></td><td>✅<small>학습량 더 많음</small></td><td>⚠️<small>문제 풀이 중심</small></td><td style="font-size:13px">L2</td></tr>
+    <tr><td>교과서 다시 쓰기</td><td>✅<small>깨달음의 순간</small></td><td>–</td><td>✅<small>"누가 빠졌나" 질문</small></td><td style="font-size:13px">L1</td></tr>
+    <tr><td>반론 미니 테드 (점수 20%)</td><td>✅<small>모두 깔깔 웃음</small></td><td>–</td><td>✅<small>A 학점형도 관행에 도전</small></td><td style="font-size:13px">L3</td></tr>
+    <tr class="best"><td>여러 초안 + 결과물 비평</td><td>✅<small>2개만 그리게 하면 불평</small></td><td>✅<small>나비 그림의 발전</small></td><td>✅<small>기준을 스스로 높임</small></td><td style="font-size:13px">L3, L4</td></tr>
+  </table>
+</div>
+<div class="card">
+  <p><b>왜 이 칸인가</b></p>
+  <details><summary>강의: 즐겁지만 덜 배운다</summary><p>물리학 실험에서 학생들은 강의를 더 즐겼고 강사를 더 유능하게 평가했지만 시험 결과 학습량은 능동학습이 많았다. 225개 논문 메타분석에서 강의식 수강생은 평균 약 0.5등급 낮았다. 강의는 대화와 반대 의견을 원천 차단해 수동적으로 정보를 받는 사람을 만든다.</p></details>
+  <details><summary>능동학습: 덜 재밌지만 더 깊이 이해한다</summary><p>정신적 노력을 더 요구해서 재미는 덜했다. 다만 책은 능동학습 자체가 '내 믿음을 고치는 습관'까지 만든다고 말하지는 않아서 ③은 ⚠️로 뒀다.</p></details>
+  <details><summary>교과서 다시 쓰기: 지식이 진화한다는 걸 본다</summary><p>1940년 교과서를 읽은 학생들은 과학자처럼 생각하며 배우는 내용을 의심하기 시작했다. 학습량을 따로 측정하지는 않아서 ②는 비워 뒀다.</p></details>
+  <details><summary>반론 미니 테드: 게임의 규칙을 바꾼다</summary><p>최종 점수의 20%를 반론 과제로 평가하자 생각의 반복이 아니라 다시 생각하기에 보상이 갔다. 연속 A 학점 세 학생의 영상은 너무 재밌어서 모두 깔깔 웃었고, 강좌의 모범 표본이 됐다.</p></details>
+  <details><summary>여러 초안 + 결과물 비평: 고쳐 쓰는 게 기본값이 된다</summary><p>론의 학생들은 두 개 이상 그리지 못하게 하면 불평했다. 매주 비평 시간에 스스로 정한 기준을 조금씩 높였고, 중고등학교에 가서도 론의 학급에 찾아와 비평을 요청했다.</p></details>
+</div>
+
+<h2><span class="n">9</span>용어 풀이</h2>
+<div class="card"><div class="terms">
+  <div class="term"><b>과도한 확신 사이클</b><p>자부심이 확신을 키우고 편향이 잘못된 지식을 정당화하는 고리.</p><p class="ex">"다들 반대하는 걸 보니 내가 맞나 봐."</p></div>
+  <div class="term"><b>아연실색 효과</b><p>말하는 사람에게 감탄하느라 내용에 주의를 덜 기울이는 현상.</p><p class="ex">"발표 진짜 멋있었는데… 무슨 내용이었지?"</p></div>
+  <div class="term"><b>능동학습</b><p>소집단이 문제를 만들고 풀며 배우는 방식.</p><p class="ex">"설명 20분, 나머지는 각자 코드에 적용해 봐요."</p></div>
+  <div class="term"><b>현상 유지 편향</b><p>익숙한 상태에서 벗어나기 싫어하는 심리.</p><p class="ex">"잘 돌아가는데 왜 바꿔요?"</p></div>
+  <div class="term"><b>고심해야 할 과제</b><p>정답 없이 차근차근 씨름하게 만드는 문제(grapples).</p><p class="ex">"이 장애를 막을 방법 세 가지를 각자 찾아와요."</p></div>
+  <div class="term"><b>도전 네트워크</b><p>서로의 생각에 이의를 제기해 주는 집단.</p><p class="ex">"이번 설계 리뷰, 반대 의견 하나씩 꼭 내 주세요."</p></div>
+  <div class="term"><b>열정 강연</b><p>자기가 좋아하는 걸 다른 사람에게 가르치는 시간.</p><p class="ex">"이번 금요일은 각자 덕질하는 기술 10분씩."</p></div>
+  <div class="term"><b>졸업생 대표</b><p>틀리지 않으려 체제에 안주하는 모범생 유형.</p><p class="ex">"컨벤션대로만 하면 리뷰에서 안 깨지잖아요."</p></div>
+</div></div>
+
+<h2><span class="n">10</span>개발 현장에 대입하면</h2>
+<p class="lead">지어낸 시나리오다. 실제 사례가 아니다.</p>
+
+<div class="card">
+  <h3 id="scenario-9a">시나리오 A. "위키가 다 틀렸어요"라는 신입 (교과서 다시 쓰기) <a class="anchor" href="#scenario-9a" aria-label="이 시나리오 링크">#</a></h3>
+  <p class="note">상황: 입사 2주 차 K가 위키대로 환경 세팅을 하다 하루를 날렸다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">흔한 흐름</p>
+      <div class="dialog">
+        <div class="line"><span class="who">사수</span><span>그거 원래 안 맞아. 나한테 물어봐.</span></div>
+      </div>
+      <p class="verdict bad">위키는 그대로고 다음 신입도 하루를 날린다.</p>
+    </div>
+    <div class="panel ok"><p class="label">책 방식</p>
+      <div class="dialog">
+        <div class="line"><span class="who">사수</span><span><span class="tech">진짜 궁금함</span>어디서 막혔어요?</span></div>
+        <div class="line"><span class="who">K</span><span>다 틀렸어요. 이거 언제 쓴 거예요?</span></div>
+        <div class="line"><span class="who">사수</span><span><span class="tech">반영</span>믿고 따라 했는데 하루가 날아가서 억울하시죠.</span></div>
+        <div class="line"><span class="who">K</span><span>네. 제가 뭘 잘못한 줄 알고 계속 처음부터 다시 했어요.</span></div>
+        <div class="line"><span class="who">사수</span><span><span class="tech">다시 쓰기 제안</span>어디가 틀렸는지 지금 제일 잘 아는 사람이 K님이에요. 직접 고쳐 볼래요? 제가 리뷰할게요.</span></div>
+        <div class="line"><span class="who">K</span><span>잘못 고치면 어떡해요.</span></div>
+        <div class="line"><span class="who">사수</span><span><span class="tech">빠진 사람 묻기</span>그건 리뷰에서 잡아요. 이 문서에서 빠진 사람이 누군지도 봐 주세요. 윈도우, M 시리즈 맥 쓰는 사람 같은.</span></div>
+        <div class="line"><span class="who">K</span><span>아, 저 M 시리즈라 안 됐던 거네요. 그 부분은 제가 쓸 수 있겠어요.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">틀린 문서를 피할 대상이 아니라 다시 쓸 교재로 바꿨다.</p>
+</div>
+
+<div class="card">
+  <h3 id="scenario-9b">시나리오 B. 박수는 받았는데 아무것도 안 바뀐 세미나 (아연실색 효과) <a class="anchor" href="#scenario-9b" aria-label="이 시나리오 링크">#</a></h3>
+  <p class="note">상황: 테크 리드 L의 아키텍처 세미나는 반응이 좋았지만 한 달 뒤 코드는 그대로다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">흔한 흐름</p>
+      <div class="dialog">
+        <div class="line"><span class="who">L</span><span>예제 더 넣어서 한 번 더 할게요.</span></div>
+      </div>
+      <p class="verdict bad">만족도는 또 높고 코드는 또 그대로다(L2).</p>
+    </div>
+    <div class="panel ok"><p class="label">책 방식</p>
+      <div class="dialog">
+        <div class="line"><span class="who">L</span><span><span class="tech">능동학습</span>오늘은 20분만 설명하고, 40분은 각자 지난 PR을 짝과 같이 고쳐 봐요.</span></div>
+        <div class="line"><span class="who">M</span><span>그냥 설명 더 해 주시면 안 돼요? 아직 잘 모르겠는데.</span></div>
+        <div class="line"><span class="who">L</span><span><span class="tech">반영</span>모르는 채로 해 보는 게 부담스러우시죠.</span></div>
+        <div class="line"><span class="who">M</span><span>틀리게 하면 시간만 버리잖아요.</span></div>
+        <div class="line"><span class="who">L</span><span><span class="tech">혼란 허락</span>헷갈리는 데가 바로 같이 볼 곳이에요. 틀린 것도 마지막에 같이 봐요.</span></div>
+        <div class="line"><span class="who">M</span><span>(40분 뒤) 저희 조는 결제 API를 어디 둘지에서 계속 싸웠어요.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">듣는 시간보다 직접 해 보고 헷갈리는 시간이 더 많이 남는다.</p>
+</div>
+
+<div class="card">
+  <h3 id="scenario-9c">시나리오 C. 첫 PR에 코멘트 20개를 받은 주니어 (결과물을 판단하기) <a class="anchor" href="#scenario-9c" aria-label="이 시나리오 링크">#</a></h3>
+  <p class="note">상황: 주니어 N이 1:1에서 "저는 개발이 안 맞나 봐요"라고 한다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">흔한 흐름</p>
+      <div class="dialog">
+        <div class="line"><span class="who">리드</span><span>에이, 다 그래요. 신경 쓰지 마요.</span></div>
+      </div>
+      <p class="verdict bad">N은 다음 PR을 최대한 늦게, 크게 올린다(L4).</p>
+    </div>
+    <div class="panel ok"><p class="label">책 방식</p>
+      <div class="dialog">
+        <div class="line"><span class="who">리드</span><span><span class="tech">반영</span>코멘트 20개가 N님에 대한 평가처럼 느껴졌군요.</span></div>
+        <div class="line"><span class="who">N</span><span>솔직히요. 남들은 두세 개던데.</span></div>
+        <div class="line"><span class="who">리드</span><span><span class="tech">진짜 궁금함</span>20개 중에 N님이 별로라는 코멘트가 있었어요, 다 코드 얘기였어요?</span></div>
+        <div class="line"><span class="who">N</span><span>…다 코드 얘기긴 했어요.</span></div>
+        <div class="line"><span class="who">리드</span><span><span class="tech">여러 초안</span>다음부터는 초안 PR을 세 번 올린다고 정해 둘래요? 코멘트는 다음 초안 재료예요.</span></div>
+        <div class="line"><span class="who">N</span><span>리뷰어분들 귀찮지 않을까요?</span></div>
+        <div class="line"><span class="who">리드</span><span><span class="tech">비평 규칙</span>리뷰 말투도 '별로' 대신 '이유가 궁금해요'로 바꾸자고 팀에 제안할게요.</span></div>
+        <div class="line"><span class="who">N</span><span>그럼 첫 초안은 이번 주에 올려 볼게요.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">코멘트를 사람에 대한 평가에서 결과물에 대한 피드백으로 옮겼다.</p>
+</div>
+
+<div class="card">
+  <h3 id="scenario-9d">시나리오 D. 틀리지 않으려는 완벽주의 시니어 (규칙 바꾸기) <a class="anchor" href="#scenario-9d" aria-label="이 시나리오 링크">#</a></h3>
+  <p class="note">상황: 기술 회의에서 매달 "당연한 관행에 반론 펴기"를 하기로 했고, 시니어 O의 차례다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">흔한 흐름</p>
+      <div class="dialog">
+        <div class="line"><span class="who">TL</span><span>아무거나 하나 반박해 주세요.</span></div>
+        <div class="line"><span class="who">O</span><span>잘 돌아가는 걸 왜 건드려요. 컨벤션 정리해서 발표할게요.</span></div>
+      </div>
+      <p class="verdict bad">발표는 깔끔하지만 아무것도 다시 생각하지 않는다(L3).</p>
+    </div>
+    <div class="panel ok"><p class="label">책 방식</p>
+      <div class="dialog">
+        <div class="line"><span class="who">TL</span><span><span class="tech">진짜 궁금함</span>반론 펴기가 좀 불편하신 것 같아요. 뭐가 걸리세요?</span></div>
+        <div class="line"><span class="who">O</span><span>근거 없이 반대하는 건 별로예요. 틀린 소리 할 수도 있고요.</span></div>
+        <div class="line"><span class="who">TL</span><span><span class="tech">반영</span>틀린 말을 하게 될까 봐 꺼려지시는 거네요.</span></div>
+        <div class="line"><span class="who">O</span><span>회의에서 틀린 말 하면 오래 남잖아요.</span></div>
+        <div class="line"><span class="who">TL</span><span><span class="tech">반대쪽 묻기</span>그럼 속으로 '이건 왜 하지?' 해 본 관행은 없어요?</span></div>
+        <div class="line"><span class="who">O</span><span>…코드 프리즈요. 2주나 하는데 핫픽스는 다 들어가거든요.</span></div>
+        <div class="line"><span class="who">TL</span><span><span class="tech">조건은 상대가</span>어떻게 하면 근거 있는 반론이 될까요? 결론이 '프리즈가 맞다'여도 좋아요.</span></div>
+        <div class="line"><span class="who">O</span><span>1년 치 핫픽스 수를 세 보면 되겠네요.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">틀릴까 봐 두려운 사람에게 근거의 기준을 스스로 정하게 하자 다시 생각할 부담이 줄었다.</p>
+</div>
+</section>
+
+<!-- ======================= 종합 ======================= -->
+<section class="chapter" id="both">
+<p class="kicker">8장 + 9장</p>
+<h1>두 장을 한 장으로</h1>
+<div class="card scroll">
+  <table class="txt">
+    <tr><th></th><th>8장 격앙된 대화</th><th>9장 교과서 다시 쓰기</th></tr>
+    <tr><td><b>안 통하는 것</b></td><td>양쪽 입장 나란히, "진실 대 부정론자", 상대 마음 상상하기</td><td>정답 주입, 감탄을 부르는 강의, 같은 커리큘럼 반복</td></tr>
+    <tr><td><b>왜 안 통하나</b></td><td>두 편으로 나누면 각자 의견이 굳고, 해법이 싫으면 문제를 부정한다</td><td>즐거움과 배움은 다르고, 틀리지 않으려는 사람은 다시 생각하지 않는다</td></tr>
+    <tr><td><b>통하는 것</b></td><td>여러 갈래로 쪼개기, 일러두기, 만약의 경우, 여러 층위의 해법, 묻기, 섞인 감정</td><td>교과서 다시 쓰기, 능동학습, 20% 버리기, 여러 초안과 결과물 비평</td></tr>
+    <tr><td><b>공통 원리</b></td><td colspan="2">흑과 백 사이의 회색을 보여주고, 첫 답을 초안으로 다룬다. 대화든 교실이든 정답을 건네는 대신 상대가 스스로 고쳐 생각할 자리를 만든다.</td></tr>
+  </table>
+</div>
+<div class="card">
+  <p><b>내일 써먹을 체크리스트</b></p>
+  <ol class="check">
+    <li>찬반으로 갈린 회의라면 투표 전에 쟁점을 작업이나 조건별 칸으로 쪼갠다.</li>
+    <li>결론을 공유할 때 한계 한 줄("아직 모르는 것")과 조건 한 줄("이 경우에만")을 붙인다.</li>
+    <li>상대가 문제를 부정하면 해결책이 싫은 건 아닌지 보고, 해법을 여러 층으로 꺼낸다.</li>
+    <li>상대 마음을 짐작하지 말고 묻는다. 내 감정은 섞인 그대로 말한다.</li>
+    <li>틀린 문서를 발견한 사람에게 그 문서를 다시 쓰게 하고, "누가 빠졌나"를 함께 묻는다.</li>
+    <li>발표 시간보다 직접 해 보는 시간을 길게 잡는다.</li>
+    <li>첫 결과물은 초안이라고 미리 정하고, 사람이 아니라 결과물을 비평한다.</li>
+  </ol>
+</div>
+</section>
+</main>
+<script>
+document.getElementById('t').addEventListener('click', function () {
+  var r = document.documentElement;
+  var dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark';
+});
+</script>
+</body>
+</html>
