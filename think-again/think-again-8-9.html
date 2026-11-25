@@ -626,22 +626,23 @@ svg.cover-art text.art-w { font-size: 26px; font-weight: 900; fill: #ffffff; str
       </div>
       <p class="verdict bad">"필요하다 대 필요 없다"만 남고 회의가 끝난다. 골먼과 피터슨처럼 양 끝에서 단정했다(B1).</p>
     </div>
-    <div class="panel ok"><p class="label">책 방식</p>
-      <div class="dialog">
-        <div class="line"><span class="who">TL</span><span><span class="tech">진짜 궁금함</span>리뷰가 시간 낭비라고 느낀 PR이 어떤 거였어요?</span></div>
-        <div class="line"><span class="who">P</span><span>네이밍 하나로 하루씩 붙잡히잖아요. AI한테 시키면 5분인데. 읽는 것도 AI가 설명해 주고요.</span></div>
-        <div class="line"><span class="who">TL</span><span><span class="tech">반영</span>5분이면 되는 걸 리뷰 기다리느라 하루 쓰는 게 답답하신 거네요.</span></div>
-        <div class="line"><span class="who">P</span><span>네. 솔직히 리뷰가 그냥 통과 의례 같아요.</span></div>
-        <div class="line"><span class="who">TL</span><span><span class="tech">반대쪽 묻기</span>반대로, AI가 짠 코드 때문에 곤란했던 적은 없어요?</span></div>
-        <div class="line"><span class="who">P</span><span>…지난달 정산이요. 경계값이 틀렸는데 아무도 못 봤어요.</span></div>
-        <div class="line"><span class="who">TL</span><span><span class="tech">만약의 경우, 일러두기</span>그럼 "리뷰가 필요하냐"보다 "어떤 코드에 필요하냐"로 나눠 보면요? 저도 AI가 읽기를 어디까지 대신할지는 몰라요.</span></div>
-        <div class="line"><span class="who">P</span><span>정산처럼 돈 나가는 데는 사람이 봐야죠. 어드민 화면 같은 건 빼도 되고요.</span></div>
-        <div class="line"><span class="who">TL</span><span><span class="tech">요약</span>네이밍으로 하루씩 붙잡히는 게 문제고, 돈 나가는 데는 사람이 보고 어드민은 빼자는 거죠. 기준 초안 써 보시고 한 달 뒤에 다시 볼까요?</span></div>
-        <div class="line"><span class="who">P</span><span>써 볼게요. 대신 네이밍 코멘트는 빼 주세요.</span></div>
+    <div class="panel ok"><p class="label">책 방식 <span class="note">어떤 코드인지 골라 보세요</span></p>
+      <div class="chipset"><div class="chip-row"><span class="chip-group">어떤 코드인가</span><div class="chips" role="group" aria-label="어떤 코드인가"><button class="chip" type="button" data-v="none" aria-pressed="true">기준이 아직 없을 때</button><button class="chip" type="button" data-v="money" aria-pressed="false">돈, 데이터가 걸린 코드</button><button class="chip" type="button" data-v="oneoff" aria-pressed="false">한 번 쓰고 버리는 코드</button></div></div></div>
+      <div class="variant" data-v="none">
+        <div class="dialog"><div class="line"><span class="who">TL</span><span><span class="tech">진짜 궁금함</span>리뷰가 시간 낭비라고 느낀 PR이 어떤 거였어요?</span></div><div class="line"><span class="who">P</span><span>네이밍 하나로 하루씩 붙잡히잖아요. AI한테 시키면 5분인데. 읽는 것도 AI가 설명해 주고요.</span></div><div class="line"><span class="who">TL</span><span><span class="tech">반영</span>5분이면 되는 걸 리뷰 기다리느라 하루 쓰는 게 답답하신 거네요.</span></div><div class="line"><span class="who">P</span><span>네. 솔직히 리뷰가 그냥 통과 의례 같아요.</span></div><div class="line"><span class="who">TL</span><span><span class="tech">반대쪽 묻기</span>반대로, AI가 짠 코드 때문에 곤란했던 적은 없어요?</span></div><div class="line"><span class="who">P</span><span>…지난달 정산이요. 경계값이 틀렸는데 아무도 못 봤어요.</span></div><div class="line"><span class="who">TL</span><span><span class="tech">만약의 경우, 일러두기</span>그럼 "리뷰가 필요하냐"보다 "어떤 코드에 필요하냐"로 나눠 보면요? 저도 AI가 읽기를 어디까지 대신할지는 몰라요.</span></div><div class="line"><span class="who">P</span><span>정산처럼 돈 나가는 데는 사람이 봐야죠. 어드민 화면 같은 건 빼도 되고요.</span></div><div class="line"><span class="who">TL</span><span><span class="tech">요약</span>네이밍으로 하루씩 붙잡히는 게 문제고, 돈 나가는 데는 사람이 보고 어드민은 빼자는 거죠. 기준 초안 써 보시고 한 달 뒤에 다시 볼까요?</span></div><div class="line"><span class="who">P</span><span>써 볼게요. 대신 네이밍 코멘트는 빼 주세요.</span></div></div>
+        <p class="key"><b>이 상황의 열쇠</b>"필요하냐"를 "어떤 코드에 필요하냐"로 바꾸고, 그 기준을 상대가 직접 쓰게 한다. <a class="anchor" href="#scenario-8e-none" aria-label="이 상황 링크">#</a></p>
+      </div>
+      <div class="variant" data-v="money" hidden>
+        <div class="dialog"><div class="line"><span class="who">TL</span><span><span class="tech">진짜 궁금함</span>이번 결제 재시도 PR도 리뷰 없이 가자는 거예요? 어떤 이유에서요?</span></div><div class="line"><span class="who">P</span><span>AI가 테스트까지 짰어요. 다 통과했고요.</span></div><div class="line"><span class="who">TL</span><span><span class="tech">반영</span>테스트까지 통과했는데 또 붙잡히면 억울하죠.</span></div><div class="line"><span class="who">P</span><span>네. 사람이 보면 또 네이밍 얘기만 할 거잖아요.</span></div><div class="line"><span class="who">TL</span><span><span class="tech">반대쪽 묻기</span>정산 때도 테스트는 있었는데, 왜 못 잡았을까요?</span></div><div class="line"><span class="who">P</span><span>…테스트도 AI가 짜서, 같은 데를 똑같이 잘못 이해했어요.</span></div><div class="line"><span class="who">TL</span><span><span class="tech">만약의 경우</span>그럼 이런 코드는 리뷰를 하되, 무엇을 볼지를 바꾸면 어때요?</span></div><div class="line"><span class="who">P</span><span>네이밍 말고 경계값이랑 중복 결제만 보는 체크리스트면 받을게요.</span></div><div class="line"><span class="who">TL</span><span><span class="tech">요약</span>테스트도 같은 오해를 할 수 있으니 돈 나가는 코드는 사람이 보고, 대신 네이밍이 아니라 경계값과 중복 결제만 본다는 거죠.</span></div></div>
+        <p class="key"><b>이 상황의 열쇠</b>리뷰를 할지 말지가 아니라 리뷰에서 무엇을 볼지를 바꾼다. 여기선 가독성보다 정확성이다. <a class="anchor" href="#scenario-8e-money" aria-label="이 상황 링크">#</a></p>
+      </div>
+      <div class="variant" data-v="oneoff" hidden>
+        <div class="dialog"><div class="line"><span class="who">P</span><span>이번 주 데이터 정리 스크립트도 리뷰 올려야 해요? 한 번 돌리고 지울 건데.</span></div><div class="line"><span class="who">TL</span><span><span class="tech">진짜 궁금함</span>한 번 돌리고 지운다는 건 어디까지 확인된 거예요?</span></div><div class="line"><span class="who">P</span><span>운영 DB엔 안 붙고 스테이징 리포트만 뽑아요. 결과는 제가 직접 확인하고요.</span></div><div class="line"><span class="who">TL</span><span><span class="tech">반영</span>결과를 눈으로 확인하니까 코드를 다시 읽을 일은 없다는 거네요.</span></div><div class="line"><span class="who">P</span><span>네. 이걸로 하루 기다리면 리포트가 늦어요.</span></div><div class="line"><span class="who">TL</span><span><span class="tech">만약의 경우</span>그럼 리뷰는 빼죠. 다만 운영 DB에 붙거나 두 번 이상 돌리게 되면 그때는 올려 주세요. 그 선, P님이 보기엔 어때요?</span></div><div class="line"><span class="who">P</span><span>그 정도면 괜찮아요. 스크립트 맨 위에 그 조건 적어 둘게요.</span></div></div>
+        <p class="key"><b>이 상황의 열쇠</b>다시 읽을 일 없고 결과로 검증되는 코드라면 리뷰를 빼는 게 맞다. 대신 언제 리뷰로 돌아오는지 조건을 정해 둔다. <a class="anchor" href="#scenario-8e-oneoff" aria-label="이 상황 링크">#</a></p>
       </div>
     </div>
   </div>
-  <p class="why">"필요하다 대 필요 없다"를 "어떤 코드에서"로 바꾸자 양쪽이 동의하는 칸이 생겼다. TL이 먼저 "AI가 어디까지 대신할지 모른다"고 인정한 게(일러두기) 방어를 낮췄다. 결론이 아니라 한 달짜리 실험이다.</p>
+  <p class="why">정답은 하나가 아니다. 돈이 걸린 코드는 리뷰하되 보는 것을 바꾸고, 버리는 코드는 리뷰를 빼고, 기준이 없으면 기준부터 같이 만든다. 저자가 정서지능에 대해 "있냐 없냐"가 아니라 "언제 중요한가"를 물은 것처럼, 리뷰도 "필요하냐"가 아니라 "어떤 코드에서"를 묻는다. 어느 쪽이든 조건은 상대가 정하게 했다.</p>
 </div>
 </section>
 
@@ -1076,6 +1077,23 @@ document.getElementById('t').addEventListener('click', function () {
   var dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
   r.dataset.theme = dark ? 'light' : 'dark';
 });
+document.querySelectorAll('.chipset').forEach(function (set) {
+  var panel = set.closest('.panel');
+  set.addEventListener('click', function (e) { var b = e.target.closest('.chip'); if (b) pick(panel, b.dataset.v); });
+});
+function pick(panel, v) {
+  panel.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', c.dataset.v === v ? 'true' : 'false'); });
+  panel.querySelectorAll('.variant').forEach(function (x) { x.hidden = x.dataset.v !== v; });
+}
+function openFromHash() {
+  var m = /^(scenario-[a-z0-9]+)-([a-z]+)$/.exec(location.hash.slice(1)); if (!m) return;
+  var h = document.getElementById(m[1]); if (!h) return;
+  var card = h.closest('.card'); var set = card.querySelector('.chipset'); if (!set) return;
+  if (!set.querySelector('.chip[data-v="' + m[2] + '"]')) return;
+  pick(set.closest('.panel'), m[2]); h.scrollIntoView();
+}
+window.addEventListener('hashchange', openFromHash);
+openFromHash();
 </script>
 </body>
 </html>
