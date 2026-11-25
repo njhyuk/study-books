@@ -614,6 +614,35 @@ svg.cover-art text.art-w { font-size: 26px; font-weight: 900; fill: #ffffff; str
   </div>
   <p class="why">원칙의 옳고 그름 대신 원칙 뒤의 경험을 물었고, 선은 I가 직접 정했다.</p>
 </div>
+<div class="card">
+  <h3 id="scenario-8e">시나리오 E. "AI가 짜는데 코드리뷰가 필요해요?" (만약의 경우) <a class="anchor" href="#scenario-8e" aria-label="이 시나리오 링크">#</a></h3>
+  <p class="src"><span class="src-tag">책 사례</span><b>정서지능 논쟁</b> <a href="#ch8-6">→ 5번</a><br>골먼은 "성공의 90%", 피터슨은 "EQ 따위는 없다"고 양 끝에서 단정했지만, 저자는 "있냐 없냐"가 아니라 "언제 중요한가"를 물어야 한다고 했다(감정을 다루는 직무엔 도움, 회계사에겐 아님). "코드리뷰와 가독성이 필요하냐"를 "어떤 코드에서 필요하냐"로 바꾸는 장면으로 옮겼다.</p>
+  <p class="note">상황: AI 도구를 적극 쓰는 팀원 P가 회의에서 "AI가 짜고 AI가 읽는데 가독성 리뷰는 시간 낭비"라며 리뷰를 없애자고 한다.</p>
+  <div class="two">
+    <div class="panel bad"><p class="label">흔한 흐름</p>
+      <div class="dialog">
+        <div class="line"><span class="who">P</span><span>AI가 짜고 AI가 읽는데 가독성 리뷰는 시간 낭비예요. 없애죠.</span></div>
+        <div class="line"><span class="who">TL</span><span>리뷰는 필수예요. 가독성은 기본이고요.</span></div>
+      </div>
+      <p class="verdict bad">"필요하다 대 필요 없다"만 남고 회의가 끝난다. 골먼과 피터슨처럼 양 끝에서 단정했다(B1).</p>
+    </div>
+    <div class="panel ok"><p class="label">책 방식</p>
+      <div class="dialog">
+        <div class="line"><span class="who">TL</span><span><span class="tech">진짜 궁금함</span>리뷰가 시간 낭비라고 느낀 PR이 어떤 거였어요?</span></div>
+        <div class="line"><span class="who">P</span><span>네이밍 하나로 하루씩 붙잡히잖아요. AI한테 시키면 5분인데. 읽는 것도 AI가 설명해 주고요.</span></div>
+        <div class="line"><span class="who">TL</span><span><span class="tech">반영</span>5분이면 되는 걸 리뷰 기다리느라 하루 쓰는 게 답답하신 거네요.</span></div>
+        <div class="line"><span class="who">P</span><span>네. 솔직히 리뷰가 그냥 통과 의례 같아요.</span></div>
+        <div class="line"><span class="who">TL</span><span><span class="tech">반대쪽 묻기</span>반대로, AI가 짠 코드 때문에 곤란했던 적은 없어요?</span></div>
+        <div class="line"><span class="who">P</span><span>…지난달 정산이요. 경계값이 틀렸는데 아무도 못 봤어요.</span></div>
+        <div class="line"><span class="who">TL</span><span><span class="tech">만약의 경우, 일러두기</span>그럼 "리뷰가 필요하냐"보다 "어떤 코드에 필요하냐"로 나눠 보면요? 저도 AI가 읽기를 어디까지 대신할지는 몰라요.</span></div>
+        <div class="line"><span class="who">P</span><span>정산처럼 돈 나가는 데는 사람이 봐야죠. 어드민 화면 같은 건 빼도 되고요.</span></div>
+        <div class="line"><span class="who">TL</span><span><span class="tech">요약</span>네이밍으로 하루씩 붙잡히는 게 문제고, 돈 나가는 데는 사람이 보고 어드민은 빼자는 거죠. 기준 초안 써 보시고 한 달 뒤에 다시 볼까요?</span></div>
+        <div class="line"><span class="who">P</span><span>써 볼게요. 대신 네이밍 코멘트는 빼 주세요.</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="why">"필요하다 대 필요 없다"를 "어떤 코드에서"로 바꾸자 양쪽이 동의하는 칸이 생겼다. TL이 먼저 "AI가 어디까지 대신할지 모른다"고 인정한 게(일러두기) 방어를 낮췄다. 결론이 아니라 한 달짜리 실험이다.</p>
+</div>
 </section>
 
 <!-- ======================= 9장 ======================= -->
